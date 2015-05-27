@@ -1,0 +1,1012 @@
+Afterword
+Both parts of this book have quite consciously tried not to give authoritative advice on choices of methods or techniques.1 The handling and analysis of spatial data with R continues to evolve – this is implicit in open source software development. It is also an important component attempting to offer applied researchers access to accepted and innovative alternatives for data analysis, and applied statisticians with representations of spatial data that make it easier to test and develop new analytical tools.
+A further goal has been to provide opportunities for bringing together the various camps and traditions analysing spatial data, to make it somewhat easier to see that their ways of conducting their work are not so different from one another in practise. It has always been worrying that fields like dis- ease mapping or spatial econometrics, with very similar data scenarios, make different choices with regard to methods, and treatments of the assumptions underlying those methods, in their research practise. Research practise evolves, and learning from a broader spread of disciplines must offer the chance to avoid choices that others have found less satisfactory, to follow choices from which others have benefitted and to participate in innovation in methods.
+This makes participation in the R community, posting questions or sug- gestions, reporting apparent bugs not only a practical activity, but also an affirmation that science is fostered more by openness than the unwarranted restriction of findings. In the context of this book, and as we said in the preface, we would be grateful for messages pointing out errors; errata will be posted on the book website (http://www.asdar-book.org).
+1 Anillustrationfromanemailexchangebetweentheauthors:“Ithinkwearetrying to enable people to do what they want, even if they shoot themselves in the feet (but in a reproducible way)!”
+￼
+344 Afterword
+R and Package Versions Used
+• R version 2.6.2 (2008-02-08), i686-pc-linux-gnu
+• Base packages: base, datasets, graphics, grDevices, methods, stats, utils
+• Other packages: adapt 1.0-4, boot 1.2-32, class 7.2-41, classInt 0.1-9, coda
+0.13-1, DCluster 0.2, digest 0.3.1, e1071 1.5-18, epitools 0.4-9, foreign 0.8- 24, gpclib 1.4-1, graph 1.16.1, gstat 0.9-44, lattice 0.17-6, lmtest 0.9-21, maps 2.0-39, maptools 0.7-7, Matrix 0.999375-9, mgcv 1.3-29, nlme 3.1- 88, pgirmess 1.3.6, pkgDepTools 1.4.1, R2WinBUGS 2.1-8, RandomFields 1.3.30, RBGL 1.14.0, RColorBrewer 1.0-2, rgdal 0.5-24, Rgraphviz 1.16.0, sandwich 2.1-0, sp 0.9-24, spam 0.13-2, spatialkernel 0.4-8, spatstat 1.12-9, spdep 0.4-20, spgrass6 0.5-3, spgwr 0.5-1, splancs 2.01-23, tripack 1.2-11, xtable 1.5-2, zoo 1.5-0
+• Loaded via a namespace (and not attached): cluster 1.11.10, grid 2.6.2, MASS 7.2-41, rcompgen 0.1-17, tools 2.6.2
+Data Sets Used
+• Auckland 90m Shuttle Radar Topography Mission: downloaded on 26 September 2006 from the US Geological Survey, National Map Seam- less Server http://seamless.usgs.gov/, GeoTiff file, 3 arcsec ‘Finished’ (90 m) data; file 70042108.zip on book website.
+• Auckland shoreline: downloaded on 7 November 2005 from the National Geophysical Data Center coastline extractor http://www.ngdc.noaa. gov/mgg/shorelines/shorelines.html; file auckland_mapgen.dat on book website.
+• Biological cell centres: available as data(cells) from spatstat, documented in Ripley (1977).
+• Broad Street cholera mortalities: original files provided by Jim Detwiler, who had collated them for David O’Sullivan for use on the cover of O’Sullivan and Unwin (2003), based on earlier work by Waldo Tobler and others; this version is available as a compressed archive of a GRASS loca- tion in file snow_location.tgz, and a collection of GeoTiff and shapefiles exported from this location in file snow_files.zip on the book website.
+• California redwood trees: available as data(redwoodfull) from spatstat, documented in Strauss (1975).
+• Cars: available as data(cars) from datasets.
+• CRAN mirrors: locations of CRAN mirrors 1 October 2005; file on book
+website CRAN051001a.txt.
+• Japan shoreline: available in the ‘world’ database provided by maps.
+• Japanese black pine saplings: available as data(japanesepines) from spat-
+stat, documented in Numata (1961).
+• Lansing Woods maple trees: available as data(lansing) from spatstat, doc-
+umented in Gerard (1969).
+• Loggerhead turtle: downloaded on 2 November 2005 with permission from SEAMAP, (Read et al., 2003), data set 105; data described in Nichols et al. (2000); file seamap105_mod.csv on book website.
+• Manitoulin Island: created using Rgshhs in maptools from the GSHHS high resolution file gshhs_h.b, version 1.5, of 3 April 2007, downloaded from ftp://ftp.soest.hawaii.edu/pwessel/gshhs.
+• Maunga Whau volcano: available as data(volcano) from datasets.
+• Meuse bank: available as data(meuse) from sp, supplemented by
+data(meuse.grid) and data(meuse.riv), and documented in Rikken and
+Van Rijn (1993) and Burrough and McDonnell (1998).
+• New York leukemia: used and documented extensively in Waller and Gotway (2004) and with data made available in Chap.9 of http:// www.sph.emory.edu/~lwaller/WGindex.htm; the data import process is described in the help file of NY_data in spdep; geometries downloaded from the CIESIN server at ftp.ciesin.columbia.edu, file /pub/census/ usa/tiger/ny/bna_st/t8_36.zip, and extensively edited; a zip archive NY_data.zip of shapefiles and a GAL format neighbours list is on the book
+website.
+• North Carolina SIDS: shapefile sids.shp (based on geometries downloaded
+from http://sal.agecon.uiuc.edu/datasets/sids.zip) and GAL for- mat neighbour lists ncCC89.gal and ncCR85.gal distributed with spdep, data from Cressie (1993), neighbour lists from Cressie and Chan (1989) and Cressie and Read (1985), documented in the nc.sids help page.
+• North Derbyshire asthma study: the data has been studied by Diggle and Rowlingson (1994), Singleton et al. (1995), and Diggle (2003); the data are made available in anonymised form by permission from Peter Diggle as shapefiles in a zip archive north_derby_asthma.zip on the book website.
+• Scottish lip cancer: Shapefile and data file downloaded from the book web- site of Waller and Gotway (2004), http://www.sph.emory.edu/~lwaller/ WGindex.htm, Chaps. 2 and 9.
+• Spearfish: downloaded as GRASS location from http://grass.itc.it/ sampledata/spearfish_grass60data-0.3.tar.gz; this data set has been the standard GRASS location for tutorials and is documented in Neteler and Mitasova (2004).
+• US 1999 SAT scores: state boundaries available in the ‘state’ database provided by maps, original attribute data downloaded on 2 November 2005 from http://www.biostat.umn.edu/~melanie/Data/ and supple- mented with variable names and state names; the data set is also avail- able from the website of Banerjee et al. (2004), http://www.biostat. umn.edu/~brad/data/state-sat.dat, and the modified version as file state.sat.data_mod.txt from the book website.
+• US Census 1990 Counties: Three shapefiles for Virginia and North and South Carolina downloaded from the US Census Bureau cartographic boundary files site for 1990 county and county equivalent areas at http://www. census.gov/geo/www/cob/co1990.html; one text file by county defining
+Afterword 345
+346
+Afterword
+•
+metropolitan area membership also from the US Census Bureau site http:// blueprod.ssd.census.gov, file /population/estimates/metro-city/ 90mfips.txt available as file 90mfips.txt on the book website.
+World volcano locations: downloaded from the National Geophysical Data Center http://www.ngdc.noaa.gov/hazard/volcano.shtml, available as file data1964al.xy from book website.
+￼References
+Abrahamsen, P. and Benth, F. E. (2001). Kriging with inequality constraints. Mathematical Geology, 33:719–744. [229]
+Akima, H. (1978). A method of bivariate interpolation and smooth surface fitting for irregularly distributed data points. ACM Transactions on Math- ematical Software, 4:148–159. [233]
+Andrade Neto, P. R. and Ribeiro Jr., P. J. (2005). A process and environment for embedding the R software into TerraLib. In VII Brazilian Symposium on Geoinformatics, Campos do Jorda ̃o. [109]
+Anselin, L. (1988). Spatial Econometrics: Methods and Models. Kluwer, Dordrecht. [289, 290]
+Anselin, L. (2002). Under the hood: Issues in the specification and inter- pretation of spatial regression models. Agricultural Economics, 27:247–267. [289, 290]
+Anselin, L., Bera, A. K., Florax, R., and Yoon, M. J. (1996). Simple diagnos- tic tests for spatial dependence. Regional Science and Urban Economics, 26:77–104. [290]
+Anselin, L., Syabri, I., and Kho, Y. (2006). GeoDa: An introduction to spatial data analysis. Geographical Analysis, 38:5–22. [256]
+Assunc ̧ ̃ao, R. and Reis, E. A. (1999). A new proposal to adjust Moran’s I for population density. Statistics in Medicine, 18:2147–2162. [266]
+Avis, D. and Horton, J. (1985). Remarks on the sphere of influence graph. In Goodman, J. E., editor, Discrete Geometry and Convexity. New York Academy of Sciences, New York, pp 323–327. [245]
+Baddeley, A. and Turner, R. (2005). Spatstat: An R package for analyzing spatial point patterns. Journal of Statistical Software, 12(6):1–42. [156]
+Baddeley, A., Mo ̈ller, J., and Waagepetersen, R. (2000). Non- and semi-para- metric estimation of interaction in inhomogeneous point patterns. Statistica Neerlandica, 54:329–350. [172, 186, 187]
+Baddeley, A., Gregori, P., Mateu, J., Stoica, R., and Stoyan, D., editors (2005). Case Studies in Spatial Point Process Modeling. Lecture Notes in Statistics 185, Springer, Berlin. [190]
+348 References
+Baddeley, A. J. and Silverman, B. W. (1984). A cautionary example on the use of second-order methods for analysing point patterns. Biometrics, 40:1089– 1093. [185]
+Bailey, T. C. and Gatrell, A. C. (1995). Interactive Spatial Data Analysis. Longman, Harlow. [13]
+Banerjee, S., Carlin, B. P., and Gelfand, A. E. (2004). Hierarchical Modeling and Analysis for Spatial Data. Chapman & Hall, London. [7, 13, 240, 259, 274, 296, 311, 314, 321, 325, 341, 345]
+Bavaud, F. (1998). Models for spatial weights: A systematic look. Geographical Analysis, 30:153–171. [251]
+Beale, C. M., Lennon, J. J., Elston, D. A., Brewer, M. J., and Yearsley, J. M. (2007). Red herrings remain in geographical ecology: A reply to Hawkins et al. (2007). Ecography, 30:845–847. [11]
+Becker, R. A., Chambers, J. M., and Wilks, A. R. (1988). The New S Language. Chapman & Hall, London. [2, 38]
+Berman, M. and Diggle, P. J. (1989). Estimating weighted integrals of the second-order intensity of a spatial point process. Journal of the Royal Sta- tistical Society B, 51:81–92. [165, 166]
+Bernardinelli, L. and Montomoli, C. (1992). Empirical Bayes versus fully Bayesian analysis of geographical variation in disease risk. Statistics in Medicine, 11:983–1007. [320]
+Besag, J. and Newell, J. (1991). The detection of clusters in rare diseases. Journal of the Royal Statistical Society A, 154:143–155. [332]
+Besag, J., York, J., and Mollie, A. (1991). Bayesian image restoration, with two applications in spatial statistics. Annals of the Institute of Statistical Mathematics, 43:1–59. [321, 326]
+Besag, J., Green, P., Higdon, D., and Mengersen, K. (1995). Bayesian compu- tation and stochastic systems. Statistical Science, 10:3–41. [330]
+Best, N., Cowles, M. K., and Vines, K. (1995). CODA: Convergence diagno- sis and output analysis software for Gibbs sampling output, Version 0.30. Technical report, MRC Biostatistics Unit, Cambridge. [324]
+Best, N. G., Waller, L. A., Thomas, A., Conlon, E. M., and Arnold, R. A. (1999). Bayesian models for spatially correlated diseases and exposure data. In Bernardo, J., Berger, J. O., Dawid, A. P., and Smith, A. F. M., editors, Bayesian Statistics 6. Oxford University Press, Oxford, pp 131–156. [326]
+Bivand, R. S. (2000). Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26:1043–1052. [99] Bivand, R. S. (2002). Spatial econometrics functions in R: Classes and meth-
+ods. Journal of Geographical Systems, 4:405–421. [151, 289]
+Bivand, R. S. (2006). Implementing spatial data analysis software tools in R.
+Geographical Analysis, 38:23–40. [289]
+Bivand, R. S. (2008). Implementing representations of space in economic ge-
+ography. Journal of Regional Science, 48:1–27. [12, 259]
+Bivand, R. S. and Portnov, B. A. (2004). Exploring spatial data analysis tech- niques using R: The case of observations with no neighbours. In Anselin, L.,
+Florax, R. J. G. M., and Rey, S. J., editors, Advances in Spatial Economet-
+rics: Methodology, Tools, Applications. Springer, Berlin, pp 121–142. [255] Bivand, R. S. and Szymanski, S. (1997). Spatial dependence through local yardstick competition: Theory and testing. Economics Letters, 55:257–265.
+[12]
+Bivand, R. S., Mu ̈ller, W., and Reder, M. (2008). Power calculations for global
+and local Moran’s I. Technical report, Department of Applied Statistics,
+Johannes Kepler University, Linz, Austria. [264]
+Bordignon, M., Cerniglia, F., and Revelli, F. (2003). In search of yardstick
+competition: A spatial analysis of Italian municipality property tax setting.
+Journal of Urban Economics, 54:199–217. [12]
+Braun, W. J. and Murdoch, D. J. (2007). A First Course in Statistical Pro-
+gramming with R. Cambridge University Press, Cambridge. [23, 127] Brewer, C. A. and Pickle, L. (2002). Comparison of methods for classifying epidemiological data on choropleth maps in series. Annals of the Association
+of American Geographers, 92:662–681. [332]
+Brewer, C. A., MacEachren, A. M., Pickle, L. W., and Herrmann, D. J. (1997).
+Mapping mortality: Evaluating color schemes for choropleth maps. Annals
+of the Association of American Geographers, 87:411–438. [332]
+Brewer, C. A., Hatchard, G. W., and Harrower, M. A. (2003). Colorbrewer in print: A catalog of color schemes for maps. Cartography and Geographic
+Information Science, 30:5–32. [76, 332]
+Brody, H., Rip, M. R., Vinten-Johansen, P., Paneth, N., and Rachman, S.
+(2000). Map-making and myth-making in Broad Street: The London cholera
+epidemic, 1854. Lancet, 356:64–68. [104, 105]
+Burrough, P. A. and McDonnell, R. A. (1998). Principles of Geographical
+Information Systems. Oxford University Press, Oxford. [4, 6, 116, 191, 345] Calenge, C. (2006). The package adehabitat for the R software: A tool for the analysis of space and habitat use by animals. Ecological Modelling,
+197:516–519. [107]
+Carstairs, V. (2000). Socio-economic factors at areal level and their relation-
+ship with health. In Elliot, P., Wakefield, J., Best, N., and Briggs, D., ed- itors, Spatial Epidemiology: Methods and Applications. Oxford University Press, Oxford, pp 51–67. [312]
+Chambers, J. M. (1998). Programming with Data. Springer, New York. [3, 27, 127]
+Chambers, J. M. and Hastie, T. J. (1992). Statistical Models in S. Chapman & Hall, London. [24, 25, 26]
+Chil`es, J. and Delfiner, P. (1999). Geostatistics: Modeling Spatial Uncertainty. Wiley, New York. [191]
+Choynowski, M. (1959). Map based on probabilities. Journal of the American Statistical Society, 54:385–388. [316]
+Chrisman, N. (2002). Exploring Geographic Information Systems. Wiley, New York. [6, 8]
+References 349
+350 References
+Christensen, R. (1991). Linear Models for Multivariate, Time Series, and Spa- tial Data. Springer, New York. [191]
+Clark, A. B. and Lawson, A. B. (2004). An evaluation of non-parametric relative risk estimators for disease mapping. Computational Statistics and Data Analysis, 47:63–78. [166]
+Clayton, D. and Kaldor, J. (1987). Empirical Bayes estimates of age- standardized relative risks for use in disease mapping. Biometrics, 43:671–681. [90, 316, 318]
+Cleveland, W. S. (1993). Visualizing Data. Hobart Press, Summit, NJ. [57, 68, 192]
+Cleveland, W. S. (1994). The Elements of Graphing Data. Hobart Press, Sum- mit, NJ. [57, 68]
+Cliff, A. D. and Ord, J. K. (1973). Spatial Autocorrelation. Pion, London. [257] Cliff, A. D. and Ord, J. K. (1981). Spatial Processes. Pion, London. [12, 253] Cowles, M. K. and Carlin, B. P. (1996). Markov Chain Monte Carlo conver-
+gence diagnostics: A comparative review. Journal of the American Statisti-
+cal Association, 91:883–904. [328]
+Cox, C. R. (1955). Some statistical methods connected with series of events
+(with discussion). Journal of the Royal Statistical Society B, 17:129–164.
+[187]
+Crawley, M. J. (2005). Statistics: An Introduction using R. Wiley, Chichester.
+[25]
+Crawley, M. J. (2007). The R Book. Wiley, Chichester. [25]
+Cressie, N. (1985). Fitting variogram models by weighted least squares. Math-
+ematical Geology, 17:563–586. [202]
+Cressie, N. (1993). Statistics for Spatial Data, Revised Edition. Wiley, New
+York. [12, 15, 152, 191, 198, 240, 259, 274, 345]
+Cressie, N. and Chan, N. H. (1989). Spatial modeling of regional variables.
+Journal of the American Statistical Association, 84:393–401. [312, 315, 320,
+325, 345]
+Cressie, N. and Read, T. R. C. (1985). Do sudden infant deaths come in
+clusters? Statistics and Decisions, 3:333–349. [312, 313, 326, 345]
+Cressie, N. and Read, T. R. C. (1989). Spatial data analysis of regional counts.
+Biometrical Journal, 31:699–719. [334]
+Cromley, E. K. and McLafferty, S. L. (2002). GIS and Public Health. Guilford
+Press, New York. [338]
+Dalgaard, P. (2002). Introductory Statistics with R. Springer, New York.
+[25, 152]
+Davison, A. C. and Hinkley, D. V. (1997). Bootstrap Methods and Their
+Application. Cambridge University Press, Cambridge. [332]
+Dean, C. B. (1992). Testing for overdispersion in Poisson and Binomial regres- sion models. Journal of the American Statistical Association, 87:451–457.
+[334]
+Deutsch, C. and Journel, A. (1992). GSLIB: Geostatistical Software Library
+and User’s Guide. Oxford University Press, New York. [191]
+Devine, O. J. and Louis, T. A. (1994). A constrained empirical Bayes estimator for incidence rates in areas with small populations. Statistics in Medicine, 13:1119–1133. [321]
+Devine, O. J., Louis, T. A., and Halloran, M. E. (1994). Empirical Bayes es- timators for spatially correlated incidence rate. Environmetrics, 5:381–398. [321]
+Diggle, P. J. (1985). A kernel method for smoothing point process data. Applied Statistics, 34:138–147. [165, 166]
+Diggle, P. J. (1990). A point process modelling approach to raised incidence of a rare phenomenon in the vicinity of a prespecified point. Journal of the Royal Statistical Society A, 153:349–362. [173, 182]
+Diggle, P. J. (2000). Overview of statistical methods for disease mapping and its relationship to cluster detection. In Elliott, P., Wakefield, J., Best, N., and Briggs, D., editors, Spatial Epidemiology: Methods and Applications. Oxford University Press, Oxford, pp 87–103. [173, 184]
+Diggle, P. J. (2003). Statistical Analysis of Spatial Point Patterns. Arnold, London, second edition. [155, 156, 158, 161, 163, 164, 166, 168, 169, 170, 171, 172, 184, 190, 345]
+Diggle, P. J. (2006). Spatio-temporal point processes: Methods and appli- cations. In Finkenstadt, B., Held, L., and Isham, V., editors, Statistical Methods for Spatio-Temporal Systems. CRC, Boca Raton, pp 1–46. [190]
+Diggle, P. J. and Chetwynd, A. (1991). Second-order analysis of spatial clus- tering for inhomogeneous populations. Biometrics, 47:1155–1163. [173, 184, 185]
+Diggle, P. J. and Ribeiro Jr., P. J. (2007). Model-Based Geostatistics. Springer, New York. [235]
+Diggle, P. J. and Rowlingson, B. (1994). A conditional approach to point process modelling of elevated risk. Journal of the Royal Statistical Society A, 157:433–440. [158, 159, 178, 182, 183, 184, 345]
+Diggle, P. J., Elliott, P., Morris, S., and Shaddick, G. (1997). Regression modelling of disease risk in relation to point sources. Journal of the Royal Statistical Society A, 160:491–505. [184]
+Diggle, P. J., Tawn, J. A., and Moyeed, R. A. (1998). Model-based geostatis- tics. Applied Statistics, 47:299–350. [230]
+Diggle, P. J., Morris, S., and Wakefield, J. (2000). Point-source modelling using case-control data. Biostatistics, 1:89–105. [173]
+Diggle, P. J., Go ́mez-Rubio, V., Brown, P. E., Chetwynd, A., and Gooding, S. (2007). Second-order analysis of inhomogeneous spatial point processes using case-control data. Biometrics, 63:550–557. [173, 175, 186, 187, 188]
+Diniz-Filho, J. A., Bini, L. M., and Hawkins, B. A. (2003). Spatial auto- correlation and red herrings in geographical ecology. Global Ecology and Biogeography, 12:53–64. [11]
+Diniz-Filho, J. A., Hawkins, B. A., Bini, L. M., De Marco Jr., P., and Black- burn, T. M. (2007). Are spatial regression methods a panacea or a Pandora’s box? A reply to Beale et al. (2007). Ecography, 30:848–851. [11]
+References 351
+352 References
+Dormann, C., McPherson, J., Arau ́jo, M., Bivand, R., Bolliger, J., Carl, G., Davies, R., Hirzel, A., Jetz, W., Kissling, D., Ku ̈hn, I., Ohlemu ̈ller, R., Peres-Neto, P., Reineking, B., Schro ̈der, B., Schurr, F., and Wilson, R. (2007). Methods to account for spatial autocorrelation in the analysis of species distributional data: A review. Ecography, 30:609–628. [274, 296, 300, 301]
+Dray, S., Legendre, P., and Peres-Neto, P. R. (2006). Spatial modeling: A com- prehensive framework for principle coordinate analysis of neighbor matrices (PCNM). Ecological Modelling, 196:483–493. [302]
+Elliott, P. and Wakefield, J. C. (2000). Bias and confounding in spatial epi- demiology. In Elliott, P., Wakefield, J., Best, N., and Briggs, D., editors, Spatial Epidemiology: Methods and Applications. Oxford University Press, Oxford, pp 68–84. [312]
+Elliott, P., Wakefield, J., Best, N., and Briggs, D., editors (2000). Spatial Epidemiology. Methods and Applications. Oxford University Press, Oxford. [173, 311]
+English, D. (1992). Geographical epidemiology and ecological studies. In El- liott, P., Cuzick, J., English, D., and Stern, R., editors, Geographical and Environmental Epidemiology. Methods for Small-Area Studies. Oxford Uni- versity Press, Oxford, pp 3–13. [326]
+Erle, S., Gibson, R., and Walsh, J. (2005). Mapping Hacks. O’Reilly, Se- bastopol, CA. [7]
+Faraway, J. J. (2004). Linear Models with R. Chapman & Hall, Boca Raton. [152]
+Faraway, J. J. (2006). Extending Linear Models with R: Generalized Linear, Mixed Effects and Nonparametric Regression Models. Chapman & Hall, Boca Raton. [152]
+Fortin, M.-J. and Dale, M. (2005). Spatial Analysis: A Guide for Ecologists. Cambridge University Press, Cambridge. [13, 240, 259, 268, 274]
+Fotheringham, A. S., Brunsdon, C., and Charlton, M. E. (2002). Geographi- cally Weighted Regression: The Analysis of Spatially Varying Relationships. Wiley, Chichester. [306, 307]
+Fox, J. (2002). An R and S-Plus Companion to Applied Regression. Sage Pub- lications, Thousand Oaks, CA. [152]
+Gatrell, A. C., Bailey, T. C., Diggle, P. J., and Rowlingson, B. S. (1996). Spa- tial point pattern analysis and its application in geographical epidemiology. Transactions of the Institute of British Geographers, 21:256–274. [172]
+Gelman, A. and Hill, J. (2007). Data Analysis Using Regression and Multi- level/Hierarchical Models. Cambridge University Press, Cambridge. [322] Gelman, A. and Rubin, D. B. (1992). Inference from iterative simulation using multiple sequences (with discussion). Statistical Science, 7:457–472. [328]
+Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2003). Bayesian Data Analysis. CRC, Boca Raton. [322]
+Gerard, D. J. (1969). Competition quotient: A new measure of the compe- tition affecting individual forest trees. Research Bulletin 20, Agricultural Experiment Station, Michigan State University. [169, 344]
+Geweke, J. (1992). Evaluating the accuracy of sampling-based approaches to calculating posterior moments. In Bernado, J. M., Berger, J. O., Dawid, A. P., and Smith, A. F. M., editors, Bayesian Statistics 4. Oxford University Press, Oxford, pp 169–194. [329]
+Ghosh, M., Natarajan, K., Stroud, T. W. F., and Carlin, B. P. (1998). Gen- eralized linear models for small-area estimation. Journal of the American Statistical Association, 93:273–282. [326]
+Gilks, W. R., Richardson, S., and Spiegelhalter, D. J., editors (1996). Markov Chain Monte Carlo in Practice. Chapman & Hall, London. [322]
+Go ́mez-Rubio, V. and Lo ́pez-Qu ́ılez, A. (2005). RArcInfo: Using GIS data with R. Computers and Geosciences, 31:1000–1006. [88, 93]
+Go ́mez-Rubio, V., Ferra ́ndiz-Ferragud, J., and Lo ́pez-Qu ́ılez, A. (2005). De- tecting clusters of disease with R. Journal of Geographical Systems, 7:189– 206. [332, 337]
+Goovaerts, P. (1997). Geostatistics for Natural Resources Evaluation. Oxford University Press, Oxford. [191, 219, 227]
+Gotway, C. A. and Young, L. J. (2002). Combining incompatible spatial data. Journal of the American Statistical Association, 97:632–648. [114]
+Griffith, D. A. (1995). Some guidelines for specifying the geographic weights matrix contained in spatial statistical models. In Arlinghaus, S. L. and Griffith, D. A., editors, Practical Handbook of Spatial Statistics. CRC, Boca Raton, pp 65–82. [251]
+Griffith, D. A. and Peres-Neto, P. R. (2006). Spatial modeling in ecology: The flexibility of eigenfunction spatial analyses. Ecology, 87:2603–2613. [302] Guttorp, P. (2003). Environmental statistics – a personal view. International
+Statistical Review, 71:169–180. [114]
+Haining, R. P. (2003). Spatial Data Analysis: Theory and Practice. Cambridge
+University Press, Cambridge. [13, 151, 311, 314, 321, 332]
+Ha ̈rdle, W., Mu ̈ller, M., Sperlich, S., and Werwatz, A. (2004). Nonparametric
+and Semiparametric Models. Springer-Verlag, Berlin. [168]
+Hastie, T. and Tibshirani, R. (1990). Generalised Additive Models. Chapman
+& Hall, London. [297]
+Hawkins, B. A., Diniz-Filho, J. A., Bini, L. M., De Marco Jr., P., and Black-
+burn, T. M. (2007). Red herrings revisited: Spatial autocorrelation and pa-
+rameter estimation in geographical ecology. Ecography, 30:375–384. [11] Held, L., Nata ́rio, I., Fento, S. E., Rue, H., and Becke, N. (2005). Towards joint disease mapping. Statistical Methods in Medical Research, 14:61–82.
+[341]
+Hepple, L. W. (1998). Exact testing for spatial autocorrelation among
+regression residuals. Environment and Planning A, 30:85–108.[264]
+References 353
+354 References
+Heuvelink, G. B. M. (1998). Error Propagation in Environmental Models with GIS. Taylor & Francis, London. [115]
+Heywood, I., Cornelius, S., and Carver, S. (2006). An Introduction to Geo- graphical Information Systems. Pearson Education, Harlow, England. [6] Hills, M. and Alexander, F. (1989). Statistical methods used in assessing the
+risk of disease near a source of possible environmental pollution: A review.
+Journal of the Royal Statistical Society A, 152:353–363. [340]
+Hjalmars, U., Kulldorff, M., Gustafsson, G., and Nagarwalla, N. (1996). Child- hood leukaemia in Sweden: Using GIS and a spatial scan statistic for cluster
+detection. Statistics in Medicine, 15:707–715. [337]
+Hjaltason, G. and Samet, H. (1995). Ranking in spatial databases. In Egen-
+hofer, M. J. and Herring, J. R., editors, Advances in Spatial Databases – 4th Symposium, SSD’95, Number 951 in Lecture Notes in Computer Science. Springer-Verlag, Berlin, pp 83–95. [215]
+Hoef, J. M. V. and Cressie, N. A. C. (1993). Multivariable spatial prediction. Mathematical Geology, 25:219–240. [210]
+Isaaks, E. and Srivastava, R. (1989). An Introduction to Applied Geostatistics. Oxford University Press, Oxford. [191]
+Jackson, C., Best, N., and Richardson, S. (2006). Improving ecological infer- ence using individual-level data. Statistics in Medicine, 25(12):2136–2159. [326]
+Jacqmin-Gadda, H., Comenges, C., Nejjari, C., and Dartigues, J. (1997). Test- ing of geographical correlation with adjustment for explanatory variables: An application to dyspnoea in the elderly. Statistics in Medicine, 21:359– 370. [298]
+Jarner, M. F., Diggle, P., and Chetwynd, A. G. (2002). Estimation of spa- tial variation in risk using matched case–control data. Biometrical Journal, 44:936–945. [173]
+Johnston, J. and DiNardo, J. (1997). Econometric Methods. McGraw Hill, New York. [290]
+Journel, A. G. and Huijbregts, C. J. (1978). Mining Geostatistics. Academic Press, London. [191, 215]
+Kaluzny, S. P., Vega, S. C., Cardoso, T. P., and Shelly, A. A. (1998). S+SpatialStats, User Manual for Windows and UNIX. Springer-Verlag, Berlin. [13, 311]
+Kelejian, H. H. and Prucha, I. R. (1999). A generalized moments estimator for the autoregressive parameter in a spatial model. International Economic Review, 40:509–533. [295]
+Kelsall, J. E. and Diggle, P. J. (1995a). Kernel estimation of relative risk. Bernoulli, 1:3–16. [166, 173, 174, 176]
+Kelsall, J. E. and Diggle, P. J. (1995b). Non-parametric estimation of spatial variation in relative risk. Statistics in Medicine, 14:559–573. [166, 173, 174, 176]
+Kelsall, J. E. and Diggle, P. J. (1998). Spatial variation in risk: A non- parametric binary regression approach. Applied Statistics, 47:559–573. [166, 173, 178, 179, 180]
+Kirkwood, R., Lynch, M., Gales, N., Dann, P., and Sumner, M. (2006). At- sea movements and habitat use of adult male Australian fur seals (Arc- tocephalus pusillus doriferus). Canadian Journal of Zoology, 84:1781–1788. [130]
+Kopczewska, K. (2006). Ekonometria i Statystyka Przestrzenna. CeDeWu, Warszawa. [VIII]
+Krieger, N., Williams, D. R., and Moss, N. E. (1997). Measuring social class in US Public Health research: Concepts, methodologies, and guidelines. An- nual Review of Public Health, 18:341–378. [326]
+Kulldorff, M. and Nagarwalla, N. (1995). Spatial disease clusters: Detection and inference. Statistics in Medicine, 14:799–810. [337, 338]
+Lawson, A., editor (2005). SMMR special issue on disease mapping. Statistical Methods in Medical Research, 14(1). [311]
+Lawson, A., Gangnon, R. E., and Wartenburg, D., editors (2006). Special issue: Developments in disease cluster detection. Statistics in Medicine, 25(5). [311, 337]
+Lawson, A. B., Browne, W. J., and Rodeiro, C. L. V. (2003). Disease Mapping with WinBUGS and MLwiN. Wiley, Chichester. [311, 314, 321, 322, 332, 341]
+Leisch, F. (2002). Sweave: Dynamic generation of statistical reports using literate data analysis. In Ha ̈rdle, W. and Ro ̈nz, B., editors, Compstat 2002 – Proceedings in Computational Statistics. Physica, Heidelberg, Verlag, pp 575–580. [VII]
+Leisch, F. and Rossini, A. J. (2003). Reproducible statistical research. Chance, 16(2):46–50. [VII]
+Lennon, J. J. (2000). Red-shifts and red herrings in geographical ecology. Ecography, 23:101–113. [11]
+Leung, Y., Ma, J.-H., and Goodchild, M. F. (2004). A general framework for error analysis in measurement-based GIS Part 1: The basic measurement- error model and related concepts. Journal of Geographical Systems, 6:325– 354. [115]
+Lin, G. and Zhang, T. (2007). Loglinear residual tests of Moran’s I autocorre- lation and their applications to Kentucky breast cancer data. Geographical Analysis, 3:293–310. [298]
+Lloyd, C. D. (2007). Local Models for Spatial Analysis. CRC, Boca Raton. [268, 306]
+Loh, J. M. and Zhou, Z. (2007). Accounting for spatial correlation in the scan statistic. The Annals of Applied Statistics, 1:560–584. [334, 339]
+Longley, P. A., Goodchild, M. F., Maguire, D. J., and Rhind, D. W. (2005). Geographic Information Systems and Science. Wiley, Chichester. [6]
+References 355
+356 References
+Louis, T. A. (1984). Estimating a population of parameter values using Bayes and empirical Bayes methods. Journal of the American Statistical Society, 79:393–398. [321]
+Marshall, R. J. (1991). Mapping disease and mortality rates using Empirical Bayes estimators. Applied Statistics, 40:283–294. [318, 319]
+Mart ́ınez-Beneito, M. A., Lo ́pez-Qu ́ılez, A., and Botella-Rocamora, P. (2008). An autoregressive approach to spatio-temporal disease mapping. Statistics in Medicine, 27:2874-2889. [341]
+Matula, D. W. and Sokal, R. R. (1980). Properties of Gabriel graphs relevant to geographic variation research and the clustering of points in the plane. Geographic Analysis, 12:205–222. [245]
+McCulloch, C. and Searle, S. (2001). Generalized, Linear, and Mixed Models. Wiley, New York. [287]
+McMillen, D. P. (2003). Spatial autocorrelation or model misspecification? International Regional Science Review, 26:208–217. [334]
+Mitchell, T. (2005). Web Mapping Illustrated: Using Open Source GIS Toolk- its. O’Reilly, Sebastopol, CA. [7, 81, 110]
+Mo ̈ller, J. and Waagepetersen, R. (2003). Statistical Inference and Simulation for Spatial Point Processes. CRC, Boca Raton. [155, 163, 164, 171, 190]
+Murrell, P. (2006). R Graphics. CRC, Boca Raton. [38, 57]
+Neteler, M. and Mitasova, H. (2004). Open Source GIS: A GRASS GIS Ap-
+proach. Kluwer, Boston, Second Edition. [99, 345]
+Neteler, M. and Mitasova, H. (2008). Open Source GIS: A GRASS GIS Ap-
+proach. Springer, New York, Third Edition. [6, 99]
+Nichols, W., Resendiz, A., J.A.Seminoff, and Resendiz, B. (2000). Transpacific
+migration of a loggerhead turtle monitored by satellite telemetry. Bulletin
+of Marine Science, 67:937–947. [37, 345]
+Numata, M. (1961). Forest vegetation in the vicinity of Choshi. Coastal flora
+and vegetation at Choshi, Chiba Prefecture IV. Bulletin of Choshi Marine
+Laboratory, Chiba University, 3:28–48 [in Japanese]. [156, 157, 344]
+Olson, J. M. and Brewer, C. A. (1997). An evaluation of color selections to accommodate map users with color-vision impairments. Annals of the
+Association of American Geographers, 87:103–134. [332]
+Openshaw, S., Charlton, M., Wymer, C., and Craft, A. W. (1987). A Mark I geographical analysis machine for the automated analysis of point data sets. International Journal of Geographical Information Systems, 1:335–358.
+[337]
+Ord, J. K. (1975). Estimation methods for models of spatial interaction. Jour-
+nal of the American Statistical Association, 70:120–126. [285]
+O’Sullivan, D. and Unwin, D. J. (2003). Geographical Information Analysis. Wiley, Hoboken, NJ. [13, 104, 116, 155, 160, 173, 240, 249, 253, 259, 268,
+344]
+Page, B., McKenzie, J., Sumner, M., Coyne, M., and Goldsworthy, S. (2006).
+Spatial separation of foraging habitats among New Zealand fur seals. Ma- rine Ecology Progress Series, 323:263–279. [130]
+Pebesma, E. J. (2004). Multivariable geostatistics in S: The gstat package. Computers and Geosciences, 30:683–691. [210]
+Pebesma, E. J. and Bivand, R. S. (2005). Classes and methods for spatial data in R. R News, 5(2):9–13. [3]
+Pinheiro, J. C. and Bates, D. M. (2000). Mixed-Effects Models in S and S-Plus. Springer, New York. [287]
+Potthoff, R. F. and Whittinghill, M. (1966). Testing for homogeneity: II. The Poisson distribution. Biometrika, 53:183–190. [334]
+Prince, M. I., Chetwynd, A., Diggle, P. J., Jarner, M., Metcalf, J. V., and James, O. F. (2001). The geographical distribution of primary biliary cir- rhosis in a well-defined cohort. Hepatology, 34:1083–1088. [173]
+R Development Core Team (2008). R: A Language and Environment for Sta- tistical Computing. R Foundation for Statistical Computing, Vienna, Aus- tria. [VII, 2]
+Read, A. J., Halpin, P. N., Crowder, L. B., Hyrenbach, K. D., Best, B. D., and Freeman, S. A. (2003). OBIS-SEAMAP: Mapping marine mammals, birds and turtles. Duke University. World Wide Web electronic publication. http://seamap.env.duke.edu, Accessed on April 01, 2008. [37, 345]
+Revelli, F. (2003). Reaction or interaction? Spatial process identification in multi-tiered government structures. Journal of Urban Economics, 53:29–53. [12]
+Revelli, F. and Tovmo, P. (2007). Revealed yardstick competition: Local government efficiency patterns in Norway. Journal of Urban Economics, 62:121–134. [12]
+Rikken, M. G. J. and Van Rijn, R. P. G. (1993). Soil pollution with heavy metals – an inquiry into spatial variation, cost of mapping and the risk evaluation of copper, cadmium, lead and zinc in the floodplains of the meuse west of stein. Technical Report, Department of Physical Geography, Utrecht University. [345]
+Ripley, B. D. (1976). The second order analysis of stationary point processes. Journal of Applied Probability, 13:255–266. [171]
+Ripley, B. D. (1977). Modelling spatial patterns (with discussion). Journal of the Royal Statistical Society B, 39:172–212. [156, 157, 171, 344]
+Ripley, B. D. (1981). Spatial Statistics. Wiley, New York. [12, 118]
+Ripley, B. D. (1988). Statistical Inference for Spatial Processes. Cambridge
+University Press, Cambridge. [12]
+Ripley, B. D. (2001). Spatial statistics in R. R News, 1(2):14–15. [13] Rowlingson, B. and Diggle, P. J. (1993). Splancs: Spatial point pattern analysis
+code in S-PLUSTM. Computers and Geosciences, 19:627–655. [156]
+Sarkar, D. (2008). Lattice: Multivariate Data Visualization with R. Springer,
+New York. [57, 68]
+Schabenberger, O. and Gotway, C. A. (2005). Statistical Methods for Spatial
+Data Analysis. Chapman & Hall, London. [12, 114, 155, 160, 163, 164, 171, 173, 190, 240, 259, 260, 268, 274, 282, 287, 296, 300, 306, 311, 321]
+References 357
+358 References
+Shekar, S. and Xiong, H., editors (2008). Encyclopedia of GIS. Springer, New York. [6]
+Sibson, R. (1981). A brief description of natural neighbor interpolation. In Barnett, V., editor, Interpreting Multivariate Data. Wiley, Chichester, pp 21–36. [233]
+Silverman, B. W. (1986). Density Estimation for Statistics and Data Analysis. Chapman & Hall, London. [165, 166]
+Singleton, C. D., Gatrell, A. C., and Briggs, J. (1995). Prevalence of asthma and related factors in primary school children in an industrial part of Eng- land. Journal of Epidemiology and Community Health, 49:326–327. [158, 345]
+Slocum, T. A., McMaster, R. B., Kessler, F. C., and Howard, H. H. (2005). Thematic Cartography and Geographical Visualization. Pearson Prentice Hall, Upper Saddle River, NJ. [57, 77]
+Spiegelhalter, D., Thomas, A., Best, N., and Lunn, D. (2003). WinBUGS Version 1.4 User’s Manual. MRC Biostatistics Unit, Cambridge. http:// www.mrc-bsu.cam.ac.uk/bugs. [322]
+Stein, M. (1999). Interpolation of Spatial Data: Some Theory for Kriging. Springer, New York. [197]
+Stineman, R. (1980). A consistently well behaved method of interpolation. Creative Computing, 6:54–57. [233]
+Stone, R. A. (1988). Investigating of excess environmental risks around puta- tive sources: Statistical problems and a proposed test. Statistics in Medicine, 7:649–660. [340]
+Strauss, D. J. (1975). A model for clustering. Biometrika, 62:467–475. [156, 157, 344]
+Sturtz, S., Ligges, U., and Gelman, A. (2005). R2WinBUGS: A package for running WinBUGS from R. Journal of Statistical Software, 12(3):1–16. [322] Tait, N., Durr, P. A., and Zheng, P. (2004). Linking R and ArcGIS: De- veloping a spatial statistical toolkit for epidemiologists. In Proceedings of
+GISVET’04, Guelph, Canada. [110]
+Tango, T. (1995). A class of tests for detecting general and focused clustering
+of rare diseases. Statistics in Medicine, 14:2323–2334. [335]
+Tango, T. and Takahashi, K. (2005). A flexibly shaped spatial scan statistic for detecting clusters. International Journal of Health Geographics, 4:1–15.
+[341]
+Tiefelsdorf, M. (1998). Some practical applications of Moran’s I’s exact con-
+ditional distribution. Papers in Regional Science, 77:101–129. [264] Tiefelsdorf, M. (2000). Modelling Spatial Processes: The Identification and Analysis of Spatial Relationships in Regression Residuals by Means of
+Moran’s I. Springer, Berlin. [264]
+Tiefelsdorf, M. (2002). The saddlepoint approximation of Moran’s I and local
+Moran’s Ii reference distributions and their numerical evaluation. Geograph- ical Analysis, 34:187–206. [264]
+Tiefelsdorf, M. and Griffith, D. A. (2007). Semiparametric filtering of spatial autocorrelation: The eigenvector approach. Environment and Planning A, 39:1193–1221. [302]
+Tiefelsdorf, M., Griffith, D. A., and Boots, B. (1999). A variance-stabilizing coding scheme for spatial link matrices. Environment and Planning A, 31:165–180. [251, 253]
+Toussaint, G. T. (1980). The relative neighborhood graph of a finite planar set. Pattern Recognition, 12:261–268. [245]
+Tukey, J. W. (1977). Exploratory Data Analysis. Addison-Wesley, Reading, MA. [151]
+Unwin, D. J. (1996). Integration through overlay analysis. In Fischer, M. M., Scholten, H. J., and Unwin, D., editors, Spatial Analytical Perspectives on GIS. Taylor & Francis, London, pp 129–138. [116, 117]
+Venables, W. N. and Dichmont, C. M. (2004). A generalised linear model for catch allocation: An example from Australia’s northern prawn fishery. Fisheries Research, 70:409–426. [152]
+Venables, W. N. and Ripley, B. D. (2000). S Programming. Springer, New York. [27, 127]
+Venables, W. N. and Ripley, B. D. (2002). Modern Applied Statistics with S. Springer, New York, Fourth Edition. [11, 152, 156, 233, 300]
+Venables, W. N., Smith, D. M., and the R Development Core Team (2008). An Introduction to R. R Foundation for Statistical Computing, Vienna, Austria. [23, 25, 26]
+Wakefield, J. C., Kelsall, J. E., and Morris, S. E. (2000). Clustering, cluster detection and spatial variation in risk. In Elliott, P., Wakefield, J., Best, N., and Briggs, D., editors, Spatial Epidemiology: Methods and Applications. Oxford University Press, Oxford, pp 128–152. [332, 333, 334]
+Wall, M. M. (2004). A close look at the spatial structure implied by the CAR and SAR models. Journal of Statistical Planning and Inference, 121:311– 324. [46, 274]
+Waller, L. A. and Gotway, C. A. (2004). Applied Spatial Statistics for Public Health Data. Wiley, Hoboken, NJ. [7, 13, 57, 82, 90, 91, 114, 155, 160, 163, 164, 171, 173, 174, 237, 239, 240, 241, 243, 259, 262, 265, 266, 268, 270, 271, 272, 274, 278, 283, 296, 300, 306, 311, 313, 314, 321, 332, 335, 339, 345]
+Walter, S. D. and Birnie, S. E. (1991). Mapping mortality and morbidity pat- terns: An international comparison. International Journal of Epidemiology, 20:678–689. [311]
+Wang, S. Q. and Unwin, D. J. (1992). Modelling landslide distribution on loess soils in China: An investigation. International Journal of Geographical Information Systems, 6:391–405. [117]
+Wheeler, D. and Tiefelsdorf, M. (2005). Multicollinearity and correlation among local regression coefficients in geographically weighted regression. Journal of Geographical Systems, 7:161–187. [307]
+Wikle, C. K. (2003). Hierarchical models in environmental science. Interna- tional Statistical Review, 71:181–200. [114]
+References 359
+360 References
+Wise, S. (2002). GIS Basics. Taylor & Francis, London. [6]
+Wood, S. (2006). Generalized Additive Models: An Introduction with R. CRC,
+Boca Raton. [180, 233, 297]
+Worboys, M. F. and Duckham, M. (2004). GIS: A Computing Perspective.
+CRC, Boca Raton, Second Edition. [6, 115]
+Yao, T. and Journel, A. G. (1998). Automatic modeling of (cross) correlogram
+tables using fast Fourier transform. Mathematical Geology, 30:589–615. [201] Zeileis, A. (2004). Econometric computing with HC and HAC covariance
+matrix estimators. Journal of Statistical Software, 11(10):1–17. [290]
+￼Subject Index
+$, see Methods, $ [, see Methods, [ [[, see Methods, [[
+adapt, see CRAN, adapt
+ade4, see CRAN, ade4
+adehabitat, see CRAN, adehabitat aerial photogrammetry, 21 Akaike’s Information Criterion
+(AIC), 281 akima, see CRAN, akima
+ArcGISTM, 6, 88, 93, 97, 98, 110, 111, 244
+coverage, 88, 93
+areal aggregates, 238
+areal data, 237, 238
+aRT package, 108, 109
+as, see Methods, as
+ASPRS Grids & Datums, 84 azimuth, 86, 126
+BARD, see CRAN, BARD Bayesian Hierarchical Models,
+321–329, 341 bbox, see Methods, bbox
+Bioconductor EBImage, 94
+biOps, see CRAN, biOps boot, see CRAN, boot boundaries
+crisp, 22
+indeterminate, 22 Broad Street pump, 104 BRugs, see CRAN, BRugs
+Class, 24, 27, 127–142, 144–148 CRS, sp, 29, 84–86
+DMS, sp, 86, 87
+GDALDataset, rgdal, 95 GDALDriver, rgdal, 95 GridTopology, sp, 48, 49, 175 im, spatstat, 168
+Line, sp, 38
+Lines, sp, 38
+listw, spdep, 251–258, 327 nb, spdep, 240–251, 256, 257,
+327
+owin, spatstat, 157 Polygon, sp, 42
+check hole slot, 122 Polygons, sp, 43
+changing ID, 121
+POSIXlt, base, 37, 132, 141, 142,
+144
+ppp, spatstat, 156, 158 Spatial, sp, 28, 29 SpatialGrid, sp, 49, 50
+362
+Subject Index
+SpatialGridDataFrame, sp, 50, 53, 176
+SpatialLines, sp, 39, 59 SpatialLinesDataFrame, sp, 39 SpatialPixels, sp, 52, 54, 59 SpatialPixelsDataFrame, sp, 52,
+53, 176
+SpatialPoints, sp, 30, 31, 156 SpatialPointsDataFrame, sp, 33,
+59, 156
+SpatialPolygons, sp, 43, 59, 175,
+176, 242 dissolve, 122
+SpatialPolygonsDataFrame, sp, 44
+class intervals, 77–79 Fisher-Jenks, 78
+natural breaks, 78, 79
+quantiles, 77, 79 classInt, see CRAN, classInt cluster, see disease cluster coda, see CRAN, coda coerce, see Methods, as cokriging, see geostatistics,
+prediction, multivariable Color Brewer, 76, 77, 332
+colour palettes, 76, 77, 332 bpy.colors, 77
+cm.colors, 76 grey.colors, 76 heat.colors, 76 rainbow, 76 terrain.colors, 76 topo.colors, 76
+Complete Spatial Randomness, 160–162, 172
+Comprehensive R Archive Network (CRAN), 3
+computational geometry, 21 coordinate reference systems, 7, 22,
+82 datum, 83, 85
+ellipsoid, 83
+prime meridian, 83 coordinates, 8, 30, 192
+geographical, 29, 30, 84, 85, 87
+projected, 86 coordinates, see Methods,
+coordinates coordinates<-, see Methods,
+        coordinates<-
+CRAN
+adapt, 169
+ade4, 240
+adehabitat, 107
+akima, 233
+BARD, 114, 238
+biOps, 94
+boot, 265
+BRugs, 322
+classInt, 77
+coda, 324, 325, 328–331 DCluster, 91, 316, 317, 333–337,
+339, 340 fields, 233, 235
+foreign, 93
+geoR, 204–206, 235 geoRglm, 235
+GeoXp, 108
+gpclib, 122
+GRASS, 99
+gstat, 145, 192, 194–198,
+200–203, 205, 206, 208–213,
+215–223, 225–228, 230, 232 lme4, 288
+lmtest, 289
+mapproj, 83
+maps, 39, 41, 44, 46, 88 maptools, 44, 90, 93, 107, 108,
+110, 121–124, 156–158, 168,
+175
+MASS, 219, 301, 302
+Matrix, 258, 285
+mgcv, 180, 182, 233, 297, 299 nlme, 288
+PBSmapping, 107
+pgirmess, 267
+pixmap, 98
+R2WinBUGS, 322–325, 328 RandomFields, 205, 227, 234
+RArcInfo, 41, 88, 93, 243, 244 RColorBrewer, 77, 332
+rgdal, 81, 83, 86, 89, 92, 94, 110,
+111, 146–148, 159, 243, 244,
+338 installation, 111
+rimage, 94
+RODBC, 110
+Rpad, 110
+RPyGeo, 111
+RSAGA, 110
+sandwich, 290
+shapefiles, 93
+sp, 3, 4, 28, 88, 107, 110, 127,
+131–142, 144–148, 192, 217,
+220 spam, 258
+SparseM, 258
+spatial, 156, 195, 233
+Spatial Task View, 14 spatialkernel, 156, 175, 187–189 spatstat, 107, 110, 120, 156, 158,
+161, 162, 168, 170, 172 spBayes, 287
+spdep, 91, 240–259, 261–271, 276, 278, 281–286, 290–295, 297, 298, 303, 305, 327, 335, 336
+spgrass6, 99–101, 104–106, 244 spgwr, 306, 307
+splancs, 110, 156, 166, 168, 169,
+175, 177, 179, 183–186 spsurvey, 120
+stinepack, 233 trip, 130–134 tripack, 245
+crepuscule, see Methods, crepuscule CRS, see Class, CRS
+CSR, see Complete Spatial
+Randomness
+Data formats BIL file, 100
+GAL, 256 GeoTiff, 96
+Keyhole Markup Language (KML), 92
+Mapgen, 40
+Portable Network Graphics
+(PNG), 97, 98 PostGIS, 90
+raster, 94
+shapefile, 89, 90, 93, 100, 120
+feature ID, 121 vector, 88
+data frames, 25, 35 Data set
+Auckland 90m Shuttle Radar Topography Mission, 50–53, 94, 95, 116–119, 147, 148, 344
+Auckland shoreline, 40, 42–44, 344
+Biological cell centres, 158, 161, 162, 171, 172, 344
+Broad Street cholera mortalities, 104–106, 344
+California redwood trees, 158, 161, 162, 166–168, 171, 172, 344
+cars, 24–27, 344
+CRAN mirrors, 30–37, 344 Japan shoreline, 39, 344 Japanese black pine saplings,
+156–158, 161, 162, 171, 172,
+344
+Lansing Woods maple trees,
+169–171, 344
+Loggerhead turtle, 37, 132, 134 loggerhead turtle, 345 Manitoulin Island, 47–49, 345 Maunga Whau volcano, 8, 9, 40,
+114, 115, 345
+Meuse bank, 54, 58–60, 62, 63,
+65, 67, 68, 70–72, 74, 76–80, 96–98, 137–140, 192–198, 200–203, 205–213, 216–220, 222, 223, 225, 226, 228, 230, 232, 250, 251, 345
+Subject Index 363
+364
+Subject Index
+New York leukemia, 239, 241–249, 251–257, 260, 262–268, 270–272, 275, 276, 278, 279, 281–283, 285, 286, 288, 290, 291, 293–295, 297–299, 301, 302, 304–307, 345
+North Carolina SIDS, 64, 74, 313–319, 321, 323–331, 333–341, 345
+North Derbyshire asthma study, 159, 175–180, 182–189, 345
+Scottish lip cancer, 90–93, 108, 345
+Spearfish, 100, 101, 103, 104, 345
+US 1999 SAT scores, 44–46, 345 US Census 1990 Counties,
+120–125, 346
+world volcano locations, 7, 8,
+346 data.frame, 25, 35
+DCluster, see CRAN, DCluster dimensions, 22
+2.5D, 23
+3D, 22
+disease cluster, 332
+detection, 332 testing, 333, 337
+chi-square test, 333 general clustering, 335 Geographical Analysis
+Machine, 337
+homogeneity, 333
+Kulldorff’s statistic, 338, 339 localised, 340, 341
+Moran’s I test, 335 Potthoff-Whittinghill test, 334 scan statistic, 338, 339
+spatial autocorrelation, 335 Stone’s test, 340, 341
+Tango’s test, 335
+disease mapping, 311 DMS, see Class, DMS
+EB, see Empirical Bayes EBImage, see Bioconductor,
+EBImage
+edit, see Methods, edit elide, see Methods, elide ellipsoid, 30
+WGS84, 30 Empirical Bayes
+estimation, 316–321
+local estimation, 319–321 log-normal model, 317 Poisson-Gamma model, 316
+empirical cumulative distribution function, 78
+ENVITM, 97 epidemiology
+spatial, 173
+EPSG geodetic parameter data set,
+83
+error measurement, 114
+error propagation, 115
+European Petroleum Survey Group
+(EPSG), 83 fields, see CRAN, fields
+foreign, see CRAN, foreign
+gcDestination, 126
+GDALDataset, see Class, GDALDataset GDALDriver, see Class, GDALDriver Geary’s C test, see spatial
+autocorrelation, tests,
+Geary’s C
+generalised additive model, 180, 182,
+297, 299
+generalised linear mixed-effect
+model, 301, 302 generalised linear model, 187, 297,
+303, 305, 307
+generic functions, see Methods
+GeoDa, 256
+geographical coordinates, see
+coordinates, geographical
+Geographical Information Systems (GIS), 4, 6, 8, 81, 88, 94,
+99, 108
+geographically weighted regression,
+305–307
+geoR, see CRAN, geoR
+geoRglm, see CRAN, geoRglm Geospatial Data Abstraction Library
+(GDAL), 81, 94, 111 OGR, 89, 92
+geostatistics, 191, 192, 195, 227 anisotropy, 198, 200, 205, 206 conditional simulation, 192, 227
+sequential, 145, 227, 228, 230 covariance, 192
+isotropy, 196
+model diagnostics, 221, 222
+cross validation, 222, 223, 225, 226
+model-based, 192, 231 monitoring networks, 191,
+231–233
+multivariable, 192, 206–208 prediction, 192, 209–215
+block kriging, 192, 193, 195, 215, 216
+domain stratification, 216, 217 indicator kriging, 192, 219,
+230
+multivariable, 192, 207, 211,
+212
+ordinary, 209
+ordinary kriging, 210 simple, 209, 210
+simple kriging, 192, 210 singular matrix errors, 220,
+221
+universal, 209
+universal kriging, 192, 210
+semivariance, 192, 195, 196, 198 stationarity, 195, 196, 198 variable transformation, 219,
+220
+variogram, 192, 195–198,
+200–205
+cloud, 196, 197
+cross, 206–208
+cutoff, 200, 201
+direction, 200, 205 exploratory, 196–198
+lag width, 200, 201
+model, 201–206, 208, 209, 230 residual, 208, 209
+GeoXp, see CRAN, GeoXp Getis-Ord G test, see spatial
+autocorrelation, tests, Getis-Ord G
+GIS
+data models, 8, 22, 88, 94 raster, 48
+Global Positioning System (GPS), 22, 82
+Global Self-consistent Hierarchical High-resolution Shoreline
+Database (GSHHS), 47, 88 Google EarthTM, 6, 21, 92, 97, 98
+image overlay, 97, 98
+KML, 92
+gpclib, see CRAN, gpclib GRASS
+location, 100 Soho, 104 Spearfish, 101
+mapset, 100 version 5, 99 version 6, 99
+Cygwin, 100 OSX, 100 Windows, 100
+window, 99
+GRASS, see CRAN, GRASS GRASS GIS, 99, 104, 244
+Great Circle distance, 86, 126 grid, 9, 48, 137–142, 144–148, 250
+hexagonal, 137–140 incomplete
+neighbours, 250 neighbours, 250
+queen, 250 rook, 250
+Subject Index 365
+366 Subject Index
+processing massive grids, 146–148
+simulation results, 145, 146
+spatio-temporal, 140–142, 144 GridTopology, see Class,
+        GridTopology
+ground control points, 22 gstat, see CRAN, gstat
+habitat, 107
+ID matching, 33, 44, 45, 313 im, see Class, im
+image, see Methods, image interpolation, 193
+geostatistical, see geostatistics, prediction
+inverse distance weighted, 194, 217
+linear regression, 194 trend surface, 195
+John Snow, 104
+join count test, see spatial
+autocorrelation, tests, join count
+kriging, see geostatistics, prediction lag
+spatial, 257
+lattice graphics, 68
+levelplot, 69
+Line, see Class, Line
+line generalisation, 41
+linear model, 263, 270, 275, 276, 279,
+290, 297, 303, 305–307 heteroskedasticity, 289, 290 multicollinearity, 276, 291 residuals, 263, 270, 275, 276,
+279, 281, 290 weighted, 279, 281 Lines, see Class, Lines
+lines, 8, 38
+lines, see Methods, lines listw, see Class, listw
+lme4, see CRAN, lme4 lmtest, see CRAN, lmtest longlat, 29, 31, 84
+mailing list, see R-Sig-Geo mailing list
+Mantel general cross product test, see spatial autocorrelation,
+tests, Mantel map class intervals, 77
+map colours, 67, 76, 77, 332 map grids, 64
+map north arrow, 63
+map plotting, 57
+map scale bar, 63
+map symbols, 67
+Mapgen, see Data formats, Mapgen mapproj, see CRAN, mapproj maps, see CRAN, maps
+Mapserver, 110
+maptools, see CRAN, maptools MASS, see CRAN, MASS, see
+CRAN, MASS mathematical geography, 21
+MatlabTM, 256
+Matrix, see CRAN, Matrix memory management, 10, 146–148 Methods, 23, 127–142, 144–148
+$, 34, 133
+[, 32, 46, 133, 147, 148
+[[, 34, 133
+as, 28, 53, 55, 58, 72, 86, 88, 97,
+107, 122, 139, 157, 158, 176,
+178 bbox, 31
+coordinates, 32 coordinates<-, 36, 59 crepuscule, 126
+edit, 244
+elide, 126, 158
+image, 57, 59, 60, 67, 79, 98 lines, 57
+names, 35
+overlay, 33, 97, 105, 116, 117,
+119, 176, 217
+plot, 33, 57, 59, 60, 67, 79 points, 57
+predict, 194
+print, 33
+proj4string, 31, 121 proj4string<-, 32
+solarnoon, 126
+solarpos, 126
+spCbind, 90, 124
+spChFIDs, 121
+spplot, 57, 69–72, 76, 80, 192 spRbind, 123
+spsample, 33, 118, 119, 137–140, 216
+spTransform, 64, 86, 91, 97, 338 subset, 144, 241, 255
+summary, 33
+sunriset, 126
+mgcv, see CRAN, mgcv
+missing values, 255 misspecification, 238, 259–261, 263,
+271–273, 276
+modifiable areal unit problem, 237
+Mondrian, 108
+Moran’s I test, see spatial
+autocorrelation, tests, Moran’s I
+names, see Methods, names nb, see Class, nb neighbours
+spatial, 238, 240–248, 250, 256, 259
+grid, 250
+higher order, 249 points, 245–249 polygons, 242–244 sets, 238
+nlme, see CRAN, nlme
+Oil & Gas Producers (OGP) Surveying & Positioning
+Committee, 83
+Open Source Geospatial Foundation
+(OSGeo), 81, 99
+OpenGIS®
+simple features, 42, 89, 122
+overlay, see Methods, overlay owin, see Class, owin
+PBSmapping, see CRAN, PBSmapping
+pgirmess, see CRAN, pgirmess pixmap, see CRAN, pixmap plot, see Methods, plot plotting maps, 57
+axes, 60–62, 64 point pattern
+binary regression estimator, 179, 180
+bounding region, 155 case–control, 173–176, 179, 180,
+186–188
+clustered, 160, 184
+definition, 155
+intensity, 163, 165
+kernel bandwidth, 166, 167, 174,
+175, 178, 179
+kernel density, 165, 166, 174, 175 kernel density ratio, 174, 175,
+178, 179 marked, 158, 173
+regular, 160
+point pattern analysis, 155 point process
+F function, 162
+G function, 161
+K function, 171, 172, 185
+inhomogeneous, 172, 173, 186–189
+definition, 155 homogeneous, 164 inhomogeneous, 165 isotropic, 164
+K function, 171
+likelihood, 168
+second-order properties, 171 stationary, 164
+point source pollution, 182–184 point-in-polygon problem, 116
+Subject Index 367
+368 Subject Index
+points, 8, 30, 192 2D, 30
+3D, 31, 140
+multi-point data, 134–136 neighbours, 244–249
+k-nearest, 244, 246
+distance bands, 244, 247–250 Gabriel, 245
+graph measures, 244, 245 higher order, 249
+relative, 245
+sphere of influence, 245 triangulation, 245
+points, see Methods, points Poisson-Gamma model, 315, 322–325 Polygon, see Class, Polygon
+Polygons, see Class, Polygons polygons, 8, 42, 237, 238
+centroid, 244
+clean topology, 244
+snap, 244
+contiguous neighbours, 242, 243,
+249
+higher order, 249 queen, 242, 243 rook, 243, 244
+dissolve, 122, 124
+hole, 42, 46, 47, 122, 237 plot order, 43, 47
+ring direction, 42, 46, 47 topology, 46
+POSIXlt, see Class, POSIXlt ppp, see Class, ppp
+predict, see Methods, predict print, see Methods, print probability map , 316
+PROJ.4 Cartographic Projections library, 81, 84, 111
+tags, 84
+ellps, 84, 86 init, 84 proj, 84, 86 towgs84, 84
+proj4string, see Methods, proj4string
+proj4string<-, see Methods, proj4string<-
+Python, 110, 111 ArcRstats, 110
+MGET, 111
+quadtree, 215 Quantum GIS, 99
+R-Geo website, 14 R-Sig-Geo mailing list, 14 R2WinBUGS, see CRAN,
+R2WinBUGS
+raised incidence, 183, 184 random fields, 192, 227 RandomFields, see CRAN,
+RandomFields RArcInfo, see CRAN, RArcInfo
+RColorBrewer, see CRAN, RColorBrewer
+remote sensing, 21, 48 multi-spectral images, 21
+rgdal, see CRAN, rgdal rimage, see CRAN, rimage RODBC, see CRAN, RODBC row names, 26
+Rpad, see CRAN, Rpad RPyGeo, see CRAN, RPyGeo RSAGA, see CRAN, RSAGA
+S-PlusTM
+SpatialStats module, 256
+sampling
+spatial, see spatial sampling
+sandwich, see CRAN, sandwich shapefile, see Data formats, shapefile shapefiles, see CRAN, shapefiles Shuttle Radar Topography Mission,
+21, 50
+simultaneous autoregression, 257
+simulation, 257 solar noon, 126
+solar position, 126
+solarnoon, see Methods, solarnoon solarpos, see Methods, solarpos
+sp.layout, argument to spplot, 72 spam, see CRAN, spam
+SparseM, see CRAN, SparseM Spatial, see Class, Spatial spatial, see CRAN, spatial
+spatial autocorrelation, 238, 257, 273, 274
+correlogram, 267 local tests, 268–272
+Moran’s I, 269–272 misspecification, 238, 259–261,
+263, 271–273, 276 Moran scatterplot, 268, 269 over-dispersion, 271
+tests, 238, 259–269, 271, 272,
+276, 281
+Empirical Bayes Moran’s I,
+266
+exact, 264, 270
+Geary’s C, 261
+Getis-Ord G, 261
+join count, 261
+Lagrange Multiplier, 290–292 Mantel, 261
+Monte Carlo, 261, 264, 266 Moran’s I, 259–264, 276, 281,
+298, 335
+Normality assumption, 261,
+263, 270
+parametric bootstrap, 261,
+265, 271, 272 permutation bootstrap, 261,
+264, 266
+Randomisation assumption,
+262, 270
+rates, 265, 266, 270–272 Saddlepoint approximation,
+264, 270
+Spatial Econometrics Library, 256
+spatial epidemiology, 311
+spatial lag, see lag, spatial
+spatial models, 273–277, 279, 297,
+301–303, 305–307 Common Factor, 293
+conditional autoregressive (CAR), 274, 282, 283, 325–329
+generalised additive model, 297, 299
+generalised estimating equations, 300
+generalised linear mixed-effect model, 301, 302
+generalised linear model, 297, 303, 305
+geographically weighted regression, 305–307
+Jacobian, 284–286
+eigenvalues, 284
+sparse matrix representation,
+285
+likelihood ratio test, 279
+log likelihood, 285, 286 mixed-effects models, 287–289 Moran eigenvector, 302, 303, 305 simultaneous autoregressive
+(SAR), 274, 277–279, 281,
+285, 286
+simultaneous moving average
+(SMA), 286
+small area estimation, 287, 289 spatial Durbin, 291, 292 spatial econometrics, 289, 290 spatial error, 291, 293
+GM estimator, 295, 296 spatial filtering, 302, 303 spatial lag, 291, 292
+2SLS, 294, 295
+spatial neighbours, see neighbours,
+spatial
+spatial queries, 116, 117
+spatial sampling, 118, 216 Spatial Task View, see CRAN,
+Spatial Task View
+spatial weights, see weights, spatial SpatialGrid, see Class, SpatialGrid
+SpatialGridDataFrame, see Class, SpatialGridDataFrame
+Subject Index 369
+370 Subject Index
+spatialkernel, see CRAN, spatialkernel
+SpatialLines, see Class, SpatialLines
+SpatialLinesDataFrame, see Class, SpatialLinesDataFrame
+SpatialPixels, see Class, SpatialPixels
+SpatialPixelsDataFrame, see Class, SpatialPixelsDataFrame
+SpatialPoints, see Class, SpatialPoints
+SpatialPointsDataFrame, see Class, SpatialPointsDataFrame
+SpatialPolygons, see Class, SpatialPolygons
+SpatialPolygonsDataFrame, see Class, SpatialPolygonsDataFrame
+spatstat, see CRAN, spatstat spBayes, see CRAN, spBayes spCbind, see Methods, spCbind spChFIDs, see Methods, spChFIDs spdep, see CRAN, spdep spgrass6, see CRAN, spgrass6 spgwr, see CRAN, spgwr splancs, see CRAN, splancs spplot, see Methods, spplot spRbind, see Methods, spRbind spsample, see Methods, spsample spsurvey, see CRAN, spsurvey spTransform, see Methods,
+spTransform
+standardisation indirect, 313 internal, 313
+Standardised Mortality Ratio, 314, 315
+StataTM, 108, 256 tmap, 108
+StatConnector (D)COM mechanism, 110
+stinepack, see CRAN, stinepack subset, see Methods, subset summary, see Methods, summary sunrise, 126
+sunriset, see Methods, sunriset sunset, 126
+support, 113, 115, 237
+change of, 114, 215, 216 TerraLib, 108, 109
+R interface, 108, 109
+thematic maps, 67
+trellis graphics, see lattice graphics triangulation, 83
+trip, see CRAN, trip
+tripack, see CRAN, tripack
+uncertainty, 22, 115, 227
+visualisation, 10 visualising spatial data, 57
+weights
+spatial, 238, 251–256, 259, 327
+asymmetric, 284, 285 binary, 251–253 generalised, 253, 254 no-neighbour areal entities,
+254, 255, 262
+row standardised, 252 similar to symmetric, 285 sparse matrix representation,
+285
+styles, 252, 253 symmetric, 282, 285 unknown, 257 variance-stabilising, 253 zero policy, 254
+WinBUGS, 322–329, 341
+GeoBUGS polygon import, 108 GeoBUGS weights import, 256
+zero policy, see weights, spatial, zero policy
+￼Functions Index
+$ method, sp, 34, 133
+[ method, sp, 32, 46, 133, 147, 148 [[ method, sp, 34, 133
+achisq.test, DCluster, 333 adapt, adapt, 169
+anova.sarlm, spdep, 292 as.geodata, geoR, 204 as.spam.listw, spdep, 258 as.vgm.variomodel, gstat, 204 as_dgRMatrix_listw, spdep, 258 axis, graphics, 60
+bbox method, sp, 31
+boot, boot, 265
+boxcox, MASS, 219
+bptest, lmtest, 289
+bptest.sarlm, spdep, 291 bpy.colors, sp, 77
+brewer.pal, RColorBrewer, 77 bugs, R2WinBUGS, 323–325, 328
+calculate.mle, DCluster, 339 card, spdep, 240, 250, 251 cell2nb, spdep, 250
+char2dms, sp, 86, 87 checkPolygonsHoles, maptools, 122 classIntervals, classInt, 77 cm.colors, grDevices, 76
+coeftest, lmtest, 290
+colorRampPalette, grDevices, 76 ContourLines2SLDF, maptools, 40, 72,
+178
+coordinates method, sp, 32
+cor, stats, 207
+correlog, pgirmess, 267
+corSpatial, nlme, 288
+cover.design, fields, 233 create2GDAL, rgdal, 96
+crepuscule method, maptools, 126 CRS, sp, 29, 31, 32, 64, 84–86, 90, 91,
+96, 97
+dd2dms, sp, 86, 87
+density, spatstat, 168
+dnearneigh, spdep, 247, 250, 267, 336
+EBest, spdep, 318 EBImoran.mc, spdep, 266 EBlocal, spdep, 319 ecdf, stats, 78
+edit.nb, spdep, 244
+eigen, base, 284
+eigenw, spdep, 284, 285
+elide method, maptools, 126, 158 empbaysmooth, DCluster, 91, 316 envelope, spatstat, 161, 162, 172 errorsarlm, spdep, 293
+eyefit, geoR, 204
+372 Functions Index
+Fest, spatstat, 162
+findColours, classInt, 78
+fit.lmc, gstat, 206–208 fit.variogram, gstat, 203, 205, 208,
+209, 222, 230 fit.variogram.reml, gstat, 205
+fitvario, RandomFields, 205
+gabrielneigh, spdep, 245
+gam, mgcv, 180, 182, 297, 299 gcDestination, maptools, 126 GDAL.close, rgdal, 95
+GDAL.open, rgdal, 95
+GDALinfo, rgdal, 95, 96 GE_SpatialGrid, maptools, 97 geary.test, spdep, 261
+Gest, spatstat, 161 getDriverLongName, rgdal, 95 getinfo.shape, maptools, 93 geweke.diag, coda, 330
+ggwr, spgwr, 307
+ggwr.sel, spgwr, 307
+glm, stats, 187, 265, 297, 303, 305 glmmPQL, MASS, 301, 302 globalG.test, spdep, 261 GMerrorsar, spdep, 295
+gmeta2grd, spgrass6, 104
+gmeta6, spgrass6, 100
+graph2nb, spdep, 245
+grey.colors, grDevices, 76 grid.locator, grid, 76
+gridat, sp, 64
+gridlines, sp, 64
+GridTopology, sp, 48, 49
+gstat, gstat, 206, 208, 209, 213, 215,
+218 gstat.cv, gstat, 225
+gwr, spgwr, 306
+gwr.sel, spgwr, 306 gzAzimuth, maptools, 86, 126
+heat.colors, grDevices, 76 hscat, gstat, 196
+I, base, 195
+identify, graphics, 74
+idw, gstat, 97, 194, 217
+image method, sp, 57, 59, 60, 67, 79,
+98 include.self, spdep, 336
+influence.measures, stats, 269 invIrW, spdep, 257 is.symmetric.nb, spdep, 246
+joincount.multi, spdep, 261 joincount.test, spdep, 261
+Kest, spatstat, 172
+khat, splancs, 185, 186
+khvmat, splancs, 185
+kinhat, spatialkernel, 188, 189 kmlOverlay, maptools, 98 knearneigh, spdep, 246
+knn2nb, spdep, 246
+krige, gstat, 145, 194, 195, 210,
+215–217, 219–222, 226, 228,
+230, 232 krige.cv, gstat, 223, 226
+lag.listw, spdep, 257, 270, 271 lagsarlm, spdep, 291, 292 lambdahat, spatialkernel, 175,
+187–189 layout, graphics, 66
+layout.north.arrow, sp, 63 layout.scale.bar, sp, 63 legend, graphics, 67 levelplot, lattice, 69 likfit, geoR, 205, 206 Line, sp, 38
+Lines, sp, 38
+lines method, sp, 57
+listw2mat, spdep, 256, 257 listw2sn, spdep, 256
+listw2U, spdep, 258
+listw2WB, spdep, 256, 327
+lm, stats, 129, 192, 194, 195, 263,
+275, 276, 279, 290, 303 lm.LMtests, spdep, 290, 291
+lm.morantest, spdep, 259, 263, 276, 281, 297, 298
+lm.morantest.exact, spdep, 264 lm.morantest.sad, spdep, 264 lme, nlme, 288, 289
+localmoran, spdep, 270 localmoran.exact, spdep, 270 localmoran.sad, spdep, 270 locator, graphics, 67, 74, 75 lognormalEB, DCluster, 317
+make_EPSG, rgdal, 83
+map, maps, 39, 44, 64 map2SpatialLines, maptools, 39, 64 map2SpatialPolygons, maptools, 44,
+88
+MapGen2SL, maptools, 40
+mat2listw, spdep, 257
+ME, spdep, 303, 305
+moran, spdep, 265
+moran.mc, spdep, 264
+moran.plot, spdep, 268, 269 moran.test, spdep, 259, 262, 263, 267 moranI.test, DCluster, 335
+mse2d, splancs, 166
+n.comp.nb, spdep, 246
+nb2lines, spdep, 257
+nb2listw, spdep, 251–254, 257, 259,
+262–265, 270, 276, 278, 290,
+335, 336 nb2WB, spdep, 327
+nbdists, spdep, 247, 248, 254, 336 nblag, spdep, 249, 267 nclass.Sturges, grDevices, 77 neig2nb, ade4, 240
+ogrDrivers, rgdal, 89
+opgam, DCluster, 337, 339 optim, stats, 169
+optimize, stats, 284
+overlay method, sp, 75, 97, 105,
+116–119, 176, 217 owin, spatstat, 107
+pal2SpatialPolygons,maptools, 88 panel.identify, lattice, 76
+par, graphics, 61, 65
+plot method, sp, 57, 59, 60, 67, 79 plot method, classInt, 78
+points method, sp, 57
+poly, stats, 195
+poly2nb, spdep, 242, 243 Polygon, sp, 42
+Polygons, sp, 43 pottwhitt.test, DCluster, 334 ppm, spatstat, 170
+ppp, spatstat, 107
+predict method, gstat, 211–213, 215,
+218, 230 probmap, spdep, 91
+proj4string method, sp, 31, 121 pruneMap, maptools, 64
+rainbow, grDevices, 76
+read.coda, coda, 329 read.dat2listw, spdep, 256 read.gal, spdep, 241, 256, 313 read.gwt2nb, spdep, 256
+read.shape, maptools, 93 readAsciiGrid, maptools, 98 readGDAL, rgdal, 94, 95
+readOGR, rgdal, 90, 159, 241, 243 readRAST6, spgrass6, 101, 105 readShapeLines, maptools, 93 readShapePoints, maptools, 93 readShapePoly, maptools, 75, 93, 313 readVECT6, spgrass6, 103, 105, 106 relativeneigh, spdep, 245
+Rgshhs, maptools, 88
+Sobj_SpatialGrid, maptools, 168, 175 soi.graph, spdep, 245
+solarnoon method, maptools, 126 solarpos method, maptools, 126 sp.correlogram, spdep, 267 sp.mantel.mc, spdep, 261 sp2Mondrian, maptools, 108
+sp2tmap, maptools, 108 sp2WB, maptools, 108 Spatial, sp, 29 SpatialFiltering, spdep, 303 SpatialGrid, sp, 49, 50
+Functions Index 373
+374 Functions Index
+SpatialGridDataFrame, sp, 50, 176 SpatialLines, sp, 39, 59 SpatialLines2PolySet, maptools, 107 SpatialLinesDataFrame, sp, 39 SpatialPixels, sp, 52, 54, 59 SpatialPixelsDataFrame, sp, 52 SpatialPoints, sp, 31, 86, 337 SpatialPointsDataFrame, sp, 33 SpatialPolygons, sp, 43, 59 SpatialPolygons2PolySet,maptools,
+107 SpatialPolygonsDataFrame, sp, 44, 45 spautolm, spdep, 278, 282–286 spCbind method, maptools, 90, 125 spChFIDs method, maptools, 121 spDistsN1, sp, 86
+spkernel2d, splancs, 168, 175, 177,
+179 spmap.to.lev, sp, 69
+spplot method, sp, 57, 69–72, 76, 80, 192
+spplot.locator, sp, 76
+spRbind method, maptools, 123 spsample method, sp, 118, 119,
+137–140, 216
+spTransform method, rgdal, 64, 86,
+91, 97 stone.stat, DCluster, 340
+stone.test, DCluster, 340 stsls, spdep, 294, 295 subset.listw, spdep, 255 subset.nb, spdep, 241, 255 sunriset method, maptools, 126 surf.ls, spatial, 195
+system, base, 100, 111
+Szero, spdep, 265
+tango.test, DCluster, 336 terrain.colors, grDevices, 76 topo.colors, grDevices, 76 Tps, fields, 233
+tri2nb, spdep, 245 tribble, splancs, 183, 184
+unionSpatialPolygons, maptools, 97, 122, 125
+variog, geoR, 204
+variogram, gstat, 196–198, 200, 201,
+203, 205, 206, 208, 209, 230 vcovHC, sandwich, 290
+vect2neigh, spgrass6, 104, 244 vgm, gstat, 145, 201–203, 205, 208,
+209, 223, 225, 230 vInfo, spgrass6, 103
+write.dta, foreign, 256 write.nb.gal, spdep, 256 write.sn2dat, spdep, 256 write.sn2gwt, spdep, 256 writeAsciiGrid, maptools, 98 writeGDAL, rgdal, 96 writeLinesShape, maptools, 93 writeOGR, rgdal, 92, 93 writePointsShape, maptools, 93 writePolyShape, maptools, 93 writeRAST6, spgrass6, 103 writeVECT6, spgrass6, 103, 244
+zerodist, sp, 220
+￼springer.com
+Model-based Geostatiatics
+Peter J. Diggle and Paulo Justiniano Ribeiro
+This volume is the first book-length treatment of model-based geostatistics. The text is expository, emphasizing statistical methods and applications rather than the underlying mathematical theory. Analyses of datasets from a range of scientific contexts feature prominently, and simulations are used to illustrate theoretical results. Readers can reproduce most of the computational results in the book by using the authors' software package, geoR, whose usage is illustrated in a computation section at the end of each chapter. The book assumes a working knowledge of classical and Bayesian methods of inference, linear models, and generalized linear models.
+2007. 230 pp. (Springer Series in Statistics) Hardcover ISBN 978-0-387-32907-9
+Software for Data Analysis Programming with R
+John M. Chambers
+This book guides the reader through programming with R, beginning with simple interactive use and progressing by gradual stages, starting with simple functions. More advanced programming tech- niques can be added as needed, allowing users to grow into software contributors, benefiting their careers and the community. R packages provide a powerful mechanism for contributions to be organized and communicated.
+2008. Approx. 510 pp. (Statistics and Computing) Hardcover ISBN 978-0-387-75935-7
+Data Manipulation with R
+Phil Spector
+This book presents a wide array of methods applicable for reading data into R, and efficiently manipulating that data. In addition to the built-in functions, a number of readily available packages from CRAN (the Comprehensive R Archive Network) are also covered. All of the methods presented take advantage of the core features of R: vectorization, efficient use of subscripting, and the proper use of the varied functions in R that are provided for common data management tasks.
+2008. 164 pp. (Use R) Softcover ISBN 978-0-387-74730-9
+Easy Ways to Order
