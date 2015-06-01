@@ -7,7 +7,6 @@ output: html_document
 
 *Applied Spatial Data Analysis with R* by Roger S. Bivand, Edzer J. Pebesma, and Virgilio Gómez-Rubio
 
-
 # 1 Hello World: Introducing Spatial Data
 
 ## 1.1 Applied Spatial Data Analysis
@@ -252,3 +251,30 @@ Data sets and code for reproducing the examples in this book are available from 
 [6] Reprinted in 2004
 
 [7] http://CRAN.R-project.org/view=Spatial
+
+From:  http://www.asdar-book.org/data2ed.php?chapter=0
+
+# Chapter 1: Code and download bundle
+
+**R Code**
+
+All verbatim chunk codes used in the Chapter are available in hello.R. This file contains the code used in the production of the book, and may be used for reference. It will not be changed, and may fall behind current releases of R and contributed packages. A simplified, modified, file hello_mod.R is also available, and will be kept up to date with reference to current R and contributed packages.
+
+It is included in the chapter script and data sets bundle as a zip archive. The easiest way to reproduce the analyses in this chapter is to download and unzip the bundle, start R in the directory in which the bundle was unpacked, and say:
+
+    source("hello_mod.R", echo=TRUE)
+
+Note that some chapters involve very time-consuming analyses!
+
+It is possible to download the code for all chapters using this short R snippet:
+
+```{r, comment=NA}
+ASDAR_BOOK <- "http://www.asdar-book.org/book2ed"
+chapters <- c("hello", "cm", "vis", "die", "cm2", "std", "sppa", "geos", "lat", "dismap")
+setwd("~/GitHub/GIS") # move to download folder
+for (i in chapters) {
+  fn <- paste(i, "mod.R", sep = "_")
+  download.file(paste(ASDAR_BOOK, fn, sep = "/"), fn)
+}
+list.files()
+```
