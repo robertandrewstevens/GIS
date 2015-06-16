@@ -164,11 +164,11 @@ Polygons formed by contour lines of volcanoes usually have a more or less circul
 
 A special form to represent spatial data is that of a grid: the values in each grid cell may represent an average over the area of the cell, or the value at the midpoint of the cell, or something more vague – think of image sensors. In the first case, we can see a grid as a special case of ordered points; in the second case, they are a collection of rectangular polygons. In any case, we can derive the position of each cell from the grid location, grid cell size, and the organization of the grid cells. Grids are a common way to tessellate a plane. They are important because
 
-– Devices such as digital cameras and remote sensing instruments register data on a regular grid
+- Devices such as digital cameras and remote sensing instruments register data on a regular grid
 
-– Computer screens and projectors show data on a grid
+- Computer screens and projectors show data on a grid
 
-– Many spatial or spatio-temporal models, such as climate models, discretize space by using a regular grid.
+- Many spatial or spatio-temporal models, such as climate models, discretize space by using a regular grid.
 
 ## 1.5 Storage and Display
 

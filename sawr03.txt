@@ -1,98 +1,120 @@
-3
-Visualising Spatial Data
-￼A major pleasure in working with spatial data is their visualisation. Maps are amongst the most compelling graphics, because the space they map is the space we think we live in, and maps may show things we cannot see otherwise. Although one can work with all R plotting functions on the raw data, for example extracted from Spatial classes by methods like coordinates or as.data.frame, this chapter introduces the plotting methods for objects inheriting from class Spatial that are provided by package sp.
+3 Visualising Spatial Data
+
+A major pleasure in working with spatial data is their visualisation. Maps are amongst the most compelling graphics, because the space they map is the space we think we live in, and maps may show things we cannot see otherwise. Although one can work with all R plotting functions on the raw data, for example extracted from Spatial classes by methods like coordinates or as.data.frame, this chapter introduces the plotting methods for objects inheriting from class Spatial that are provided by package sp.
+
 R has two plotting systems: the ‘traditional’ plotting system and the Trellis Graphics system, provided by package lattice, which is present in default R installations (Sarkar, 2008). The latter builds upon the ‘grid’ graphics model (Murrell, 2006). Traditional graphics are typically built incrementally: graphic elements are added in several consecutive function calls. Trellis graphics allow plotting of high-dimensional data by providing conditioning plots: organised lattices of plots with shared axes (Cleveland, 1993, 1994). This feature is particularly useful when multiple maps need to be compared, for example in case of a spatial time series, comparison across a number of species or variables, or comparison of different modelling scenarios or approaches. Trellis graphs are designed to avoid wasting space by repetition of identical information. The value of this feature, rarely found in other software, is hard to overestimate.
+
 Waller and Gotway (2004, pp. 68–86) provide an introduction to statistical mapping, which may be deepened with reference to Slocum et al. (2005).
+
 Package sp provides plot methods that build on the traditional R plotting system (plot, image, lines, points, etc.), as well as a ‘new’ generic method called spplot that uses the Trellis system (notably xyplot or levelplot from the lattice package) and can be used for conditioning plots. The spplot meth- ods are introduced in a later sub-section, first we deal with the traditional plot system.
-58 3 Visualising Spatial Data
+
 3.1 The Traditional Plot System
+
 3.1.1 Plotting Points, Lines, Polygons, and Grids
+
 In the following example session, we create points, lines, polygons, and grid object, from data.frame objects, retrieved from the sp package by function data, and plot them. The four plots obtained by the plot and image commands are shown in Fig. 3.1.
+
 > library(sp)
 > data(meuse)
+
 points lines
-￼￼￼￼￼￼￼￼￼polygons grid
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼Fig. 3.1. The meuse data set: sample points, the sample path (line), the Meuse river (ring), and the gridded study area
+polygons grid
+
+Fig. 3.1. The meuse data set: sample points, the sample path (line), the Meuse river (ring), and the gridded study area
+
 > coordinates(meuse) <- c("x", "y")
 > plot(meuse)
 > title("points")
+
 The SpatialPointsDataFrame object used is created from a data.frame provided
 with sp, and the plot method shows the points with the default symbol.
+
 > cc <- coordinates(meuse)
 > m.sl <- SpatialLines(list(Lines(list(Line(cc)))))
 > plot(m.sl)
 > title("lines")
+
 A SpatialLines object is made by joining up the points in sequence, and plot
 draws the resulting zig-zags.
+
 > data(meuse.riv)
 > meuse.lst <- list(Polygons(list(Polygon(meuse.riv)),
 +     "meuse.riv"))
 > meuse.sr <- SpatialPolygons(meuse.lst)
 > plot(meuse.sr, col = "grey")
 > title("polygons")
-We make a SpatialPolygons object from data provided with sp outlining the
-banks of the River Meuse.
+
+We make a SpatialPolygons object from data provided with sp outlining the banks of the River Meuse.
+
 > data(meuse.grid)
 > coordinates(meuse.grid) <- c("x", "y")
 > meuse.grid <- as(meuse.grid, "SpatialPixels") > image(meuse.grid, col = "grey")
 > title("grid")
+
 Finally, we convert grid data for the same Meuse bank study area into a ‘SpatialPixels’ object and display it using the image method, with all cells set to ‘grey’.
+
 On each map, one unit in the x-direction equals one unit in the y- direction. This is the default when the coordinate reference system is not longlat or is unknown. For unprojected data in geographical coordinates (lon- gitude/latitude), the default aspect ratio depends on the (mean) latitude of the area plotted. The default aspect can be adjusted by passing the asp argument.
+
 A map becomes more readable when we combine several elements. We can display elements from those created above by using the add = TRUE argument in function calls:
+
 > image(meuse.grid, col = "lightgrey")
 > plot(meuse.sr, col = "grey", add = TRUE)
 > plot(meuse, add = TRUE)
+
 the result of which is shown in Fig. 3.2.
-The over-plotting of polygons by points is the consequence of the order
-of plot commands. Up to now, the plots only show the geometry (topology, shapes) of the objects; we start plotting attributes (e.g. what has actually been measured at the sample points) in Sect. 3.1.5.
-3.1 The Traditional Plot System 59
-60 3 Visualising Spatial Data
-￼Fig. 3.2. Map elements combined into a single map
+
+The over-plotting of polygons by points is the consequence of the order of plot commands. Up to now, the plots only show the geometry (topology, shapes) of the objects; we start plotting attributes (e.g. what has actually been measured at the sample points) in Sect. 3.1.5.
+
+Fig. 3.2. Map elements combined into a single map
+
 As an alternative to plot(x,add=TRUE), one can use the commands lines for objects of class SpatialLines and points for SpatialPoints; text elements can be added by text.
+
 3.1.2 Axes and Layout Elements
+
 Maps often do not have axes, as the information carried in map axes can often be omitted. Especially, projected coordinates are usually long, hard to read and geographical reference is much easier when recognisable features such as administrative boundaries, rivers, coast lines, etc. are present. In the standard plot functions, the Boolean argument axes can be set to control axis plotting, and the function axis can be called to add axes, fine-tuning their appearance (tic placement, tic labels, and font size). The following commands result in Fig. 3.3:
+
 > layout(matrix(c(1, 2), 1, 2))
 > plot(meuse.sr, axes = TRUE)
 > plot(meuse.sr, axes = FALSE)
 > axis(1, at = c(178000 + 0:2 * 2000), cex.axis = 0.7) > axis(2, at = c(326000 + 0:3 * 4000), cex.axis = 0.7) > box()
-Not plotting axes does not increase the amount of space R used for plotting the data.1 R still reserves the necessary space for adding axes and titles later
-1 This is not true for Trellis plots; see Sect. 3.2.
-￼
-axes = TRUE axes added
-3.1 The Traditional Plot System 61
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼178000 180000 182000 178000 180000 182000
-Fig. 3.3. Default axes (left) and custom axes (right) for the meuse.riv data Table 3.1. Graphic arguments useful for controlling figure and plotting region
-￼Argument Meaning
-fin Figure region pin Plotting region mai Plotting margins mar Plotting margins
+
+Fig. 3.3. Default axes (left) and custom axes (right) for the meuse.riv data
+
+Not plotting axes does not increase the amount of space R used for plotting the data [1]. R still reserves the necessary space for adding axes and titles later on. We can, however, explicitly instruct R not to reserve this space by using function par, which is intended to have side effects on the next plot on the current device. The par-settable arguments that are useful for controlling the physical size of the plot are listed in Table 3.1.
+
+Table 3.1. Graphic arguments useful for controlling figure and plotting region
+
+Argument Meaning Unit Length
+fin Figure region Inch 2 
+pin Plotting region Inch 2 
+mai Plotting margins Inch 4 
+mar Plotting margins Lines of text 4
 see ?par for more information
-Unit
-Inch 2 Inch 2 Inch 4 Lines of text 4
-Length
-￼￼on. We can, however, explicitly instruct R not to reserve this space by using function par, which is intended to have side effects on the next plot on the current device. The par-settable arguments that are useful for controlling the physical size of the plot are listed in Table 3.1.
+
 In Fig. 3.4, generated by
+
 > oldpar = par(no.readonly = TRUE)
 > layout(matrix(c(1, 2), 1, 2))
 > plot(meuse, axes = TRUE, cex = 0.6) > plot(meuse.sr, add = TRUE)
 > title("Sample locations")
 > par(mar = c(0, 0, 0, 0) + 0.1)
 > plot(meuse, axes = FALSE, cex = 0.6)
-326000 328000 330000 332000 334000 336000 338000
-326000           330000           334000           338000
-62 3 Visualising Spatial Data
-￼Sample locations
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼178500 179500 180500 181500
-Fig. 3.4. Equal-area plots with (left) and without (right) the default space R re- serves for axes and title(s)
 > plot(meuse.sr, add = TRUE)
 > box()
 > par(oldpar)
+
+Fig. 3.4. Equal-area plots with (left) and without (right) the default space R re- serves for axes and title(s)
+
 the same data set is plotted twice within the same amount of space, at the left-hand side with R’s default margins leaving space for axes, and on the right-hand side with maximised plotting space and no axes drawn.
+
 Modifying the margins by setting mar in the par command, for example to par(mar=c(3,3,2,1)) further optimises space usage when axes are drawn, leaving (little) space for a title. It should be noted that the margin sizes are absolute, expressed in units the height of a line of text, and so their effect on map scale decreases when the plotting region is enlarged.
+
 The plot methods provided by package sp do not allow the printing of axis labels, such as ‘Easting’ and ‘Northing’, or ‘x-coordinate’ and ‘y-coordinate’. The reason for this is technical, but mentioning axis names is usually obsolete once the graph is referred to as a map. The units of the coordinate reference system (such as metres) should be equal for both axes and do not need men- tioning twice. Geographical coordinates are perhaps an exception, but this is made explicit by axis tic labels such as 52◦N, or by adding a reference grid.
-329000 330000 331000 332000 333000 334000 335000
-3.1 The Traditional Plot System 63
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼0 1 km
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼Fig. 3.5. Scale bar and north arrow as map elements
+
+Fig. 3.5. Scale bar and north arrow as map elements
+
 When we decide not to draw axes on a map, in addition to reference boundaries, we can provide the reader of a map with a guidance for distance and direction by plotting a scale bar and a north arrow, which can be placed interactively using locator followed by a few well-chosen clicks in the map (Fig. 3.5):
+
 > plot(meuse)
 > plot(meuse.sr, add = TRUE)
 > plot(meuse)
@@ -101,11 +123,15 @@ When we decide not to draw axes on a map, in addition to reference boundaries, w
 > text(locator(1), "1 km")
 > SpatialPolygonsRescale(layout.north.arrow(), offset = locator(1),
 + scale = 400, plot.grid = FALSE)
+
 When large numbers of maps for identical areas have to be produced with identical layout elements, it pays off to write a function that draws all layout elements. As an alternative, one may use conditioning plots; see the spplot method in Sect. 3.2.
-64 3 Visualising Spatial Data
+
 3.1.3 Degrees in Axes Labels and Reference Grid
+
 Unprojected data have coordinates in latitude and longitude degrees, with negative degrees referring to degrees west (of the prime meridian) and south (of the Equator). When unprojected spatial data are plotted using sp meth- ods (plot or spplot), the axis label marks will give units in decimal degrees N/S/E/W, for example 50.5◦N. An example is shown in Fig.3.6.
+
 When, for reference purposes, a grid needs to be added to a map, the function gridlines can be used to generate an object of class SpatialLines. By default it draws lines within the bounding box of the object at values where the default axes labels are drawn; other values can be specified. Grid lines may be latitude/longitude grids, and these are non-straight lines. This is accomplished by generating a grid for unprojected data, projecting it, and plotting it over the map shown. An example is given in Fig. 1.2. This is the code used to define and draw projected latitude/longitude grid lines and grid line labels for this figure, which uses the world map from package maps:
+
 > library(maptools)
 > library(maps)
 >
@@ -122,45 +148,68 @@ wrld_grd <- gridlines(wrld_sp, easts = c(-179, seq(-150,
 150, 50), 179.5), norths = seq(-75, 75, 15), ndiscr = 100) wrld_grd_proj <- spTransform(wrld_grd, prj_new)
 at_sp <- gridat(wrld_sp, easts = 0, norths = seq(-75,
     75, 15), offset = 0.3)
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼84°W 82°W 80°W 78°W 76°W
-Fig. 3.6. Decimal degrees in axis labels: the North Carolina SIDS data
+
 34°N 35°N 36°N 37°N
+84°W 82°W 80°W 78°W 76°W
+
+Fig. 3.6. Decimal degrees in axis labels: the North Carolina SIDS data
+
 > at_proj <- spTransform(at_sp, prj_new)
 > plot(wrld_proj, col = "grey60")
 > > + +
 plot(wrld_grd_proj, add = TRUE, lty = 3, col = "grey70") text(coordinates(at_proj),pos = at_proj$pos, offset = at_proj$offset,
     labels = parse(text = as.character(at_proj$labels)),
     cex = 0.6)
+
 Here, function gridat returns an object to draw the labels for these ‘gridded curves’.
+
 3.1.4 Plot Size, Plotting Area, Map Scale, and Multiple Plots
+
 R distinguishes between figure region, which is the size of the total figure including axes, title, etc., and plotting region, which is the area where the actual data are plotted. To control the total size of the figure, we can get and set the figure size in inches:
+
 > par("pin")
 > par(pin = c(4, 4))
+
 If we want to enlarge the plotting window, we may have to close the current plotting device and re-open it specifying size, for example
+
 > dev.off()
 > X11(width = 10, height = 10)
+
 on Unix machines; replace X11 with windows on MS-Windows computers and with quartz on Mac OS X. When graphic output is written to files, we can use, for example
+
 > postscript("file.ps", width = 10, height = 10)
+
 The geographical (data) area that is shown on a plot is by default that of the data, extended with a 4% margin on each side. Because the plot size is fixed before plotting, only one of the axes will cover the entire plotting region, the other will be centred and have larger margins. We can control the data area plotted by passing xlim and ylim in a plot command, but by default they will still be extended with 4% on each side. To prevent this extension, we can set par(xaxs="i") and par(yaxs="i"). In the following example
+
 > pin <- par("pin")
 > dxy <- apply(bbox(meuse), 1, diff)
 > ratio <- dxy[1]/dxy[2]
 > par(pin = c(ratio * pin[2], pin[2]), xaxs = "i", yaxs = "i") > plot(meuse, pch = 1)
 > box()
+
 we first set the aspect of the plotting region equal to that of the data points, and then we plot the points without allowing for the 4% extension of the range in all directions. The result (Fig. 3.7) is that in all four sides one plotting symbol is clipped by the plot border.
+
 If we want to create more than one map in a single figure, as was done in Fig. 3.1, we can sub-divide the figure region into a number of sub-regions. We can split the figure into two rows and three columns either by
-3.1 The Traditional Plot System 65
-66 3 Visualising Spatial Data
-￼Fig. 3.7. Plotting region exactly equal to sample location ranges: border point symbols are clipped
+
+Fig. 3.7. Plotting region exactly equal to sample location ranges: border point symbols are clipped
+
 > par(mfrow = c(2, 3))
+
 or
+
 > layout(matrix(1:6, 2, 3, byrow = TRUE))
+
 Each time a plot command that would normally create a new plot is called (i.e. without add = TRUE), a plot is drawn in a new sub-area; this is done row- wise for this example, or column-wise when byrow = FALSE. Function layout also allows us to vary the height and width of the sub-areas.
+
 Map scale is the ratio between the length of one unit on the map and one unit in the real world. It can only be controlled ahead of time when both the size of the plotting region, which is by default only a part of the figure size unless all margins are set to zero, and the plotting area are defined, or otherwise exactly known.
+
 3.1.5 Plotting Attributes and Map Legends
+
 Up to now we have only plotted the geometry or topology of the spatial objects. If in addition we want to show feature characteristics or attributes of the objects, we need to use type, size, or colour of the symbols, lines, or polygons. Grid cells are usually plotted as small adjacent squares, so their plotting is in some sense a special case of plotting polygons. Table 3.2 lists the
-3.1 The Traditional Plot System 67 Table 3.2. Useful annotation arguments to be passed to plot or image methods
-￼Class(es) SpatialLinesDataFrame
+
+Table 3.2. Useful annotation arguments to be passed to plot or image methods
+
+Class(es) SpatialLinesDataFrame
 SpatialPolygonsDataFrame
 SpatialPointsDataFrame
 SpatialPixelsDataFramea and SpatialGridDataFrame
@@ -188,8 +237,11 @@ Further help
 ?image.default
 ?image.default
 ￼￼aUse image to plot gridded data
+
 graphic arguments that can be passed to the plot methods for the Spatial classes with attributes. When a specific colour, size, or symbol type refers to a specific numeric value or category label of an attribute, a map legend is needed to communicate this information. Example code for function legend is given below and shown in Fig. 3.8.
+
 We provide image methods for objects of class SpatialPixelsDataFrame and SpatialGridDataFrame. As an example, we can plot interpolated (see Chap. 8) zinc concentration (zinc.idw) as a background image along with the data:
+
 > grays = gray.colors(4, 0.55, 0.95)
 > image(zn.idw, col = grays, breaks = log(c(100, 200, 400, + 800, 1800)))
 > plot(meuse.sr, add = TRUE)
@@ -200,91 +252,57 @@ legend("left", legend = legVals, pch = 1, pt.cex = sqrt(legVals)/20,
 bty = "n", title = "measured")
 legend("topleft", legend = c("100-200", "200-400", "400-800",
 "800-1800"), fill = grays, bty = "n", title = "interpolated")
+
 the result of which is shown in Fig. 3.8. This example shows how the legend command is used to place two legends, one for symbols and one for colours. In this example, rather light grey tones are used in order not to mask the black symbols drawn.
-68 3 Visualising Spatial Data
-interpolated, ppm
-100−200 200−400 400−800 800−1800
-measured, ppm
-     100
-     200
-     500
-     1000
-     2000
-measured and interpolated zinc
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼Fig. 3.8. Sample data points for zinc (ppm) plotted over an interpolated image, with symbol area proportional to measured concentration
+
+Fig. 3.8. Sample data points for zinc (ppm) plotted over an interpolated image, with symbol area proportional to measured concentration
+
 3.2 Trellis/Lattice Plots with spplot
+
 Apart from the traditional plot methods provided by package sp, a sec- ond method, called spplot, provides plotting of spatial data with attributes through the Trellis graphics system (Cleveland, 1993, 1994), which is for R provided (and extended) by package lattice (Sarkar, 2008). Trellis plots are a bit harder to deal with initially because plot annotation, the addition of information like legend, lines, text, etc., is handled differently and needs to be thought out first. The advantage they offer is that many maps can be composed into single (sets of) graphs, easily and efficiently.
+
 3.2.1 A Straight Trellis Example
-Consider the plotting of two interpolation scenarios for the zinc variable in the meuse data set, obtained on the direct scale and on the log scale. We can do
-￼3.2 Trellis/Lattice Plots with spplot 69 this either by the levelplot function from package lattice, or by using spplot,
+
+Consider the plotting of two interpolation scenarios for the zinc variable in the meuse data set, obtained on the direct scale and on the log scale. We can do this either by the levelplot function from package lattice, or by using spplot,
 which is for grids a simple wrapper around levelplot:
+
 > library(lattice)
 > levelplot(z ~ x + y | name, spmap.to.lev(zn[c("direct",
 +     "log")]), asp = "iso")
 > spplot(zn[c("direct", "log")])
-The results are shown in Fig. 3.9. Function levelplot needs a data.frame as second argument with the grid values for both maps in a single column (z) and a factor (name) to distinguish between them. Helper function spmap.to.lev converts the SpatialPixelsDataFrame object to this format by replicating the
-333000
-332000
-331000
-330000
-179000 181000
-direct log 1800 1600 1400 1200 1000
-y
-direct
-log
-179000 181000
-x
-800
-600
-400
-200
- 1800
- 1600
- 1400
- 1200
- 1000
- 800
- 600
- 400
- 200
+
+The results are shown in Fig. 3.9. Function levelplot needs a data.frame as second argument with the grid values for both maps in a single column (z) and a factor (name) to distinguish between them. Helper function spmap.to.lev converts the SpatialPixelsDataFrame object to this format by replicating the coordinates, stacking the attribute variables, and adding a factor to distinguish the two maps. Function spplot plots each attribute passed in a single panel, which results in this case in two panels.
+
 Fig. 3.9. Two interpolation scenarios for the meuse data set, plotted on the same total size. (Top) Example of levelplot, (bottom) example of the spplot wrapper, which turns off axes
-￼70 3 Visualising Spatial Data
-coordinates, stacking the attribute variables, and adding a factor to distinguish the two maps. Function spplot plots each attribute passed in a single panel, which results in this case in two panels.
+
 The spplot method does all this too, but hides many details. It provides a simple access to the functions provided by package lattice for plotting objects deriving from class Spatial, while retaining the flexibility offered by lattice. It also allows for adding geographic reference elements to maps.
+
 Note that the plot shows four dimensions: the geographic space spanning x- and y-coordinates, the attribute values displayed in colour or grey tone, and the panel identifier, here the interpolation scenario but which may be used to denote, for example attribute variable or time.
+
 3.2.2 Plotting Points, Lines, Polygons, and Grids
+
 Function spplot plots spatial objects using colour (or grey tone) to denote attribute values. The first argument therefore has to be a spatial object with attributes.
-Figure 3.10 shows a typical plot with four variables. If the goal is to com- pare the absolute levels in ppm across the four heavy metal variables, it makes
-lead
-zinc cadmium.st
-copper.st
-zinc.st
-[−1.2,0] (0,1] (1,2] (2,3] (3,5]
-ppm standardised
-cadmium copper lead.st
-[0,20] (20,50] (50,200] (200,500] (500,2000]
+
+Figure 3.10 shows a typical plot with four variables. If the goal is to com- pare the absolute levels in ppm across the four heavy metal variables, it makes sense to plot them in a single figure with one legend. For such cases, the con- ditioning plots of spplot are ideal. Other cases in which multiple sub-maps are useful are, for example when different moments of time or different mod- elling scenarios are used to define the factor that splits the data over sub-plots (panels).
+
 Fig. 3.10. Soil measurements for four heavy metals in the Meuse data set; (left) in ppm units, (right) each variable scaled to mean zero and unit standard variance
-￼3.2 Trellis/Lattice Plots with spplot 71
-sense to plot them in a single figure with one legend. For such cases, the con- ditioning plots of spplot are ideal. Other cases in which multiple sub-maps are useful are, for example when different moments of time or different mod- elling scenarios are used to define the factor that splits the data over sub-plots (panels).
+
 The first argument to spplot is a Spatial*DataFrame object with points, lines, polygons, or a grid. The second argument tells which attributes (column names or numbers) should be used; if omitted, all attributes are plotted. Further attributes control the plotting: colours, symbols, legend classes, size, axes, and geographical reference items to be added.
+
 An example of a SpatialLinesDataFrame plot is shown in Fig. 3.11 (left). The R function contourLines is used to calculate the contourlines:
+
 > library(maptools)
 > data(meuse.grid)
 > coordinates(meuse.grid) <- c("x", "y")
-> meuse.grid <- as(meuse.grid, "SpatialPixelsDataFrame") > im <- as.image.SpatialGridDataFrame(meuse.grid["dist"]) > cl <- ContourLines2SLDF(contourLines(im))
+> meuse.grid <- as(meuse.grid, "SpatialPixelsDataFrame") 
+> im <- as.image.SpatialGridDataFrame(meuse.grid["dist"]) 
+> cl <- ContourLines2SLDF(contourLines(im))
 > spplot(cl)
-0.9
-0.8
-0.7
-0.6
-0.5 0.5 0.4 0.4 0.3
-0.2 0.1
-> 5 yrs 2−5 yrs annual
+
 Fig. 3.11. (Top left) Contour lines for distance to river Meuse, levels represented by grey tones; (top right) grid plot of a numerical variable; (bottom left) plot of the factor variable flood frequency; note the different legend key
-1.0 0.9 0.8 0.7 0.6
-0.3 0.2 0.1 0.0
-72 3 Visualising Spatial Data
+
 3.2.3 Adding Reference and Layout Elements to Plots
+
 Method spplot takes a single argument, sp.layout, to annotate plots with lines, points, grids, polygons, text, or combinations of these. This argument contains either a single layout item or a list of layout items. A single layout item is a list object. Its first component is the name of the layout function to be called, followed by the object to be plotted and then optional arguments to adjust colour, symbol, size, etc. The layout functions provided are the following:
 ￼sp layout function Object class
 Useful argumentsa pch, cex, col
@@ -440,3 +458,5 @@ For the spplot methods for lines, polygons, and grids, we can pass the ar- gumen
 > cuts = (0:10)/10
 > spplot(meuse.grid, "dist", colorkey = list(labels = list(at = cuts)), + at = cuts)
 Having provided a framework for handling and visualising spatial data in R, we now move to demonstrate how user data may be imported into R, and the results of analysis exported.
+
+[1] This is not true for Trellis plots; see Sect. 3.2.
