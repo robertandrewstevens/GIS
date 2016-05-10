@@ -1,0 +1,23 @@
+---
+title: "Untitled"
+author: "Robert A. Stevens"
+date: "September 14, 2015"
+output: html_document
+---
+
+R-GIS-tutorial/R-GIS_tutorial.md  [09/11/15]
+Pasted from <https://github.com/Pakillo/R-GIS-tutorial/blob/master/R-GIS_tutorial.md>
+ 
+Spatial data in R: Using R as a GIS  [09/11/15]
+Pasted from <http://pakillo.github.io/R-GIS-tutorial/>
+
+https://github.com/Pakillo/R-GIS-tutorial/blob/master/R-GIS_tutorial.md
+
+Displaying time series, spatial and space-time data with R [04/30/15]
+Pasted from <http://oscarperpinan.github.io/spacetime-vis/>
+Buy the book?
+ 
+Methods to display time series, spatial and space-time data using R 
+http://oscarperpinan.github.io/spacetime-vis/
+Pasted from <https://github.com/oscarperpinan/spacetime-vis>
+R code (reproduce without the book?)
