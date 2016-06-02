@@ -1,0 +1,239 @@
+Spatial Econometrics with RV. Gomez-RubioDepartamento de Matematicas 
+Escuela de Ingenieros Industriales de Albacete U. de Castilla-La Mancha
+based on work by Roger S. Bivand, Edzer Pebesma and H. Rue
+Introduction
+1 Spatial models2 Regression models3 Spatial Econometrics4 Bayesian Inference5 Approximate Inference
+Spatial models
+
+Spatial models
+Modeling spatial dependence is important when events close in space are thought to have a similar behavior
+Spatial statisticsPoint patterns 
+Geostatistics 
+Lattice dataPoint patterns
+Point patterns record the locations of a series of events in a study areaThe aim is to determine the distribution of points in the study area, i.e., their probability distribution in spaceAlso, it is of interest whether the events appear independently (Complete Spatial Randomness), clustered or repelled
+Árboles jóvenes Árboles adultosGeostatistics
+Some environmental processes show a strong spatial pattern (e.g., temperature, wind speed, concentration of heavy metals, etc.)If a survey is conducted in the study area there is a strong spatial dependenceSamples close in space will have closer values than values that are further apartLattice data
+Lattice data involves data measured at different areas, e.g., neighborhoods, cities, provinces, states, etc.Spatial dependence appears because neighbour areas will show similar values of the variable of interestApproaches to spatial modeling
+In point patterns, we will estimate the density of the point patternIn geostatistics, we will model how the variable changes with distanceIn the analysis of lattice data we will model the correlation between the outcome at the different areasThis part focuses on the analysis of lattice data using different modelsMultivariate Normal
+The vector of observed values y can be supposed to have a multivariate Normal distribution:y ∼ MVN(μ,Σ)Note that each observation y[i] has been measured at a different locationThe mean can be modeled to depend on relevant covariates
+The variance covariance matrix can be defined so that observations close in space have higher covariance/correlationIn the case of lattice data, a common approach is that if two regions are neighbors they will have a higher correlationThere are many ways of defining Σ to account for spatial dependenceContinuous processesIn geostatistics we have a continuous process Z(x)Observations are taken at some survey sites {xi}ni=1Many times we have multivariate data. For example, concentration of heavy metals (zinc, copper, etc.)A common approach is to measure how the process change, i.e, Z(x) − Z(y)We can compute the (semi-)variogram to measure spatial dependenceγ(x, y)= E[(Z(x)−Z(y))^2]/2Kriging uses the semivariogram to produce estimates such asZˆ(x) = sum(λi(x)*Z(xi), i = 1:n)
+
+where λi(x) are a number of weightsλi(x) is higher for points xi closer to xModels for lattice data
+We have observations y = {y[i], i = 1:n} from the n areas
+y is assigned a multivariate distribution that accounts for spatial dependence
+A common way of describing spatial proximity in lattice data is by means of an adjacency matrix W
+W[i,j] is non-zero if areas i and j are neighborsUsually, two areas are neighbors if the share a common boundary 
+
+There are other definitions of neighborhoodAdjacency matrix
+
+Regression models
+
+Regression models
+It is often the case that, in addition to yi , we have a number of covariates xiHence, we may want to regress yi on xiIn addition, to the covariates we may want to account for the spatialstructure of the dataDifferent types of regression models can be used to model lattice data:
+Generalized Linear Models (with spatial random effects) 
+
+Spatial econometrics modelsLinear Mixed Models
+A common approach (for Gaussian data) is to use a linear regression with random effectsY = Xβ + Zu + εThe vector random effects u is modeled as a MVN:u ∼ N(0, σu2Σ)Σ is defined such as it induces higher correlation in adjacent areas 
+
+Z is a design matrix for the random effectsεi ∼ N(0,σ2), i = 1, ..., n: error termThe full model can be written as:Y ∼ N (Xβ, σ2I + σu2ZΣZT)Generalized Linear Models
+Yi random variable of the Exponential FamilyfY (y; θ, φ) = exp{(yθ − b(θ))/a(φ) + c(y, φ)}φ is a scale parameter and θ is the canonical parameter 
+
+Linear predictor
+η = β1x1 + ... + βk xk
+
+Link functiong(μ)= η = β1x1 + ... + βkxk
+
+μ ≡ E[Y]Generalized Linear ModelsParameters of some common distributions:
+Distribution Range y       μ(θ) Canon. link φN(μ, σ2)     (−∞, ∞)       θ             identity σ2 
+P(μ)         0,1,...,∞     exp(θ)        log 1B(n, p)/n    (0,1,...,n)/n expθ/(1+expθ) logit 1/n 
+Some link functions:η = log(μ)η = logit(μ) = log(μ/(1 − μ))η = probit(μ) = Φ^(-1)(μ)η = cloglog(μ) = log(−log(1 − μ))GLMs with random effects
+Yi random variable of the exponential familyfY (y; θ, φ) = exp{(yθ − b(θ))/a(φ) + c(y, φ)}Linear predictorη = β1x1 + ... + βkxk + ZuLink functiong(μ)=η=β1x1+...+βkxk+Zu; μ≡E[Y]u is a vector of random effects, which are MVN-distributedu ∼ N(0,σ2Σ) 
+
+Z is a design matrix for the random effectsStructure of spatial random effectsThere are many different ways of including spatial dependence in Σ: 
+
+Simultaneous autoregressive (SAR):Σ = [(I − ρW )′(I − ρW )]−1 
+
+Conditional autoregressive (CAR):Σ = (I − ρW )−1Σi,j depends on a function of d(i,j). For example:Σi,j =exp{−d(i,j)/φ}SARThe variance-covariance matrix has the following structure: 
+
+Σ = [(I − ρW )′(I − ρW )]−1W can have many different forms.Any of them will produce a symmetric variance-covariance matrix (but some may be singular!)W can be the usual 0/1 matrixW is often taken as a row-standardized matrix 
+
+This implies that in many cases ρ ∈ (−1, 1) 
+
+See (Haining, 2003) for detailsCAR
+The variance-covariance matrix has the following structure: 
+
+Σ = (I − ρW )−1In order to have a valid variance covariance matrix W must be symmetricW is often taken as a binary matrixIf ρ = 1 we have an intrinsic CAR model but then Σ is singular 
+
+Fitting this model will require the use of a generalized inverse 
+
+Seldom a problem if you are Bayesian!!
+Spatial Econometrics
+
+Spatial Econometrics ModelsSlightly different approach to spatial modelingInstead of using latent effects, spatial dependence is modeled explicitlyAutoregressive models are used to make the response variable to depend on the values at its neighborsSpatial autoregressive modelsAutoregression on the response termy=ρWy+α+e; e∼N(0,σ2I) 
+
+Autoregression on the error termy=α+u;u=ρWu+e; e∼N(0,σ2I) 
+
+ρ measures spatial dependenceIf ρ = 0 there is no spatial dependenceRegression models on the responsey=α+ρWy+e; e∼N(0,σ2I) 
+
+y=(I−ρW)−1(α+e); e∼N(0,σ2I)
+y =(I −ρW)−1α+ε; ε∼N(0,σ2[(I −ρW′)(I −ρW)]−1)Regression models on the error term
+y = α + u
+u = Wu + ε
+ε ∼ N(0, σ^2I) 
+
+y = α + u
+u = (I − ρW)^(−1)ε
+ε ∼ N(0, σ^2I) 
+
+y = α + u
+u ∼ N(0, σ^2[(I − ρW′)(I − ρW)]^(−1))Simultaneous Autoregresive Model (SEM)This model includes covariates 
+
+Autoregressive on the error term
+y = Xβ + u
+u = ρWu + e
+e ∼ N(0, σ^2)
+y = Xβ + ε
+ε ∼ N(0, σ^2(I − ρW)^(−1)(I −ρW′)^(−1))Spatial Lag Model (SLM)
+This model includes covariates 
+
+Autoregressive on the response
+y = ρWy + Xβ + e
+e ∼ N(0, σ^2)
+y =(I − ρW)^(−1)Xβ + ε
+ε ∼ N(0, σ^2(I −ρW)^(−1)(I −ρW′)^(−1))Spatial Durbin Model (SDM)
+This model includes covariates 
+
+Autoregressive on the response
+In addition, we include the lagged-covariates WX as another extra term in the regression
+y = ρWy + Xβ + WXγ + e = [X, WX][β, γ] + e
+e ∼ N(0, σ^2) 
+
+y = ρWy + XWXB + e
+XWX = [X, WX]
+B = [β, γ]
+y = (I −ρW)^(−1)XWXB + ε
+ε ∼ N(0, σ^2(I − ρW)^(−1)(I − ρW′)^(−1))Probit models
+LeSage et al. (2011) use a non-Guassian model for the probability of reopening a business in the aftermath of hurricane Katrina in New Orleans.A non-linear link function is used between the response y (=0/1) and a latent variable y∗ which represents (unobserved) net profits.y∗ is modeled with a SLMOther models (SEM, SDM) could be used for the latent variable y∗ 
+
+Note also that a GLM can be fit to this dataSoftware
+The Spatial Econometrics Toolbox (http://www.spatial-econometrics.com/) provides Matlab code to fit a wealth of Spatial Econometrics models
+The R software provides number of functions to fit LMs, LMMs, GLMs and GLMMs
+The spdep package implements some functions for spatial econometrics. In particular, it includes functions to fit SEM, SLM and SDM
+Other generic software packages can be used to fit some of the models presented so far
+INLA recently added a new slm latent effect to fit Spatial Econometrics models
+Bayesian Inference
+
+Bayes Inference for Spatial Models
+Bayesian inference is based on Bayes’ rule to compute the probability of the parameters in the model (θ) given the observed data (y):π(θ|y) = π(y|θ)π(θ)/π(y)π(y|θ) is the likelihood of the modelπ(θ) is the prior distribution of the parameters in the modelπ(y) is a normalizing constant that is often ignoredIn spatial statistics, the prior distribution of the random effects can be used to encode spatial dependenceVague priors are often used for most parameters in the modelOverview of Bayesian inference
+The aim is computing the (multivarite) posterior probability of θ 
+
+Given that π(θ|y) is a probability distribution, all statements are made in terms of probabilities
+Bayesian inference is ’exact’
+Obtaining π(θ|y) is usually hard
+However, recent computational approaches have made Bayesian inference easierModel fitting and computational issues
+Fitting a Bayesian model means computing π(θ|y)θ contains all parameters in the model and, possibly, other derived quantities
+For example, we could compute posterior probabilities of linear predictors, random effects, sums of random effects, etc.Depending on the likelihood and the prior distribution computing π(θ|y) can be very difficultIn the last 20-30 years some computational approaches have been proposed to estimate π(θ|y) with Monte Carlo methodsMarkov Chain Monte CarloMCMC is a family of algorithms to obtain draws from the posterior distributionIn all cases, a starting point is chosen to start the simulationAt every iteration k we draw a sample of the model parameters θˆusing a particular ruleAfter a number of iterations (burn-in period) the algorithm is in fact sampling from π(θ|y)The iterations generated during the burn-in period are discardedA large number of simulations is generated and the posterior distribution is estimated from these samplesSummary statistics for the model parameters can be easily computed from the simulations
+(k) iMetropolis-Hasting Sampling
+Generic algorithm to sample from any probability density f(y)
+A candidate-generating probability density q(v|u) is required for every parameter in the model
+This will give us the probabilities of sampling v given that we are at u 
+
+We draw a value from this density
+This new value is only accepted with a certain probability, which is
+min{1, π(v|y)q(u|v)/[π(u|y)q(v|u)]} Note thatπ(v|y)q(u|v)/[π(u|y)q(v|u)] = π(y|v)π(v)q(u|v)/[π(y|u)π(u)q(v|u)]
+
+and that the probability can be computedGibbs Sampling
+Particular case of Metropolis-Hastings algorithmThe proposal distribution is the conditional distribution given the:
+π(θ[i]^(k + 1)|θ[1]^(k + 1), ..., θ[i − 1]^(k + 1), θ[i + 1]^(k) , ...θ[N](k))This ensures that the acceptance probability is always 1
+This means that we always accept a new candidate point, i.e., ”we always move to a new point”
+Sampling from the conditional probability distribution is usually very easyInference with MCMC
+MCMC provides simulations from the ensemble of model parameters, i.e., a multivariate distribution
+This will allow us to estimate the joint posterior distribution
+However, we may be interested in a single parameter or a subset of the parameters
+Inference for this subset of parameters can be done by simply ignoring the samples for the other parameters
+Using the samples it is possible to compute the posterior distribution of any function on the model parameters
+MCMC may require lots of simulations to make valid inference
+Also, we must check that the burn-in period has ended, i.e., we have reached the posterior distribution
+Approximate Inference
+
+Integrated Nested Laplace Approximation
+Sometimes we only need marginal inference on some parameters, i.e., we need π(θi|y)
+Rue et al. (2009) propose a way of approximating the marginal distributions
+Now we are dealing with dealing with (many) univariate distributions
+This is computationally faster because numerical integration techniques are used instead of Monte Carlo samplingIntegrated Nested Laplace Approximation
+We assume that observations y are independent given x (latent effects) and θ = (θ1, θ2) (two sets of hyperparameters)
+The model likelihood can be written down as 
+
+π(y|x, θ) =  prod(π(y[i]|x[i], θ), i ∈ I)
+x[i] is the latent linear predictor ηi and other latent effects
+I represents the indices of the observations (missing observations are not include here, for example)
+θ = (θ1, θ2) is a vector of hyperparameters for the likelihood and the distribution of the latent effectsIntegrated Nested Laplace Approximation
+x is assumed to be distributed as a Gaussian Markov Random Field with precision matrix Q(θ2)
+The posterior distribution of the model parameters and hyperparameters is:
+π(x, θ|y)
+∝ π(θ)π(x|θ)*prod(π(y[i]|x[i], θ), i ∈ I)∝ π(θ)|Q(θ)|^(n/2)*exp{−x^T*Q(θ/2)x + sum(log(π(y[i]|x[i], θ)}, i ∈ I)Integrated Nested Laplace ApproximationThe marginal distributions for the latent effects and hyper-parameters can be written asπ(x[i]|y) ∝ integral(π(x[i]|θ, y)π(θ|y) dθ) and
+π(θ[j]|y) ∝ integral(π(θ|y) dθ[−j])Integrated Nested Laplace Approximation
+Rue et al. (2009) provide a simple approximation to π(θ|y), denoted by π ̃(θ|y), which is then used to compute the approximate marginal distribution of a latent parameter x[i]:
+π ̃(x[i]|y) = sum(π ̃(x[i]|θ[k, y])×π ̃(θ[k]|y)×∆[k]
+∆[k] are the weights of a particular vector of values θ[k] in a grid for the ensemble of hyperparameters.INLA & Spatial econometrics models
+In principle, INLA can handle a large number of models
+The R-INLA package for the R software implements a number of likelihoods and latent effects
+This includes GLMs
+This includes several latent effects for lattice data
+The CAR model is implemented
+SEM, SLM and SDM are not implemented
+The SAR specification is not implemented as a random effects
+Linear predictors are multiplied by (I − ρW )^(−1), and this is not implemented either
+What to do then?New slm latent class
+INLA includes now a new latent effect:
+x=(I[n] − ρW)^(−1)(Xβ + e)
+W is a row-standardized adjacency matrix
+ρ is a spatial autocorrelation parameterX is a matrix of covariates, with coefficients β 
+
+e are Gaussian i.i.d. errorsExample: Boston housing dataIn our first example we will re-analyze the Boston housing data (Harrison and Rubinfeld, 1978). Here the interest is in estimating the median of owner-occupied houses using relevant covariates and the spatial structure of the data (Pace and Gilley, 1997). We have fitted the 3 spatial econometrics models described in this paper plus a spatial model with a CAR error term. In addition, we have fitted the spatial econometrics models using maximum likelihood to compare the estimates of the model parametersBoston housing data: Adjacency matrix
+Boston housing data: Load data
+> library(INLA)> library(spdep)> library(parallel)> library(maptools)> boston.tr <- readShapePoly(system.file("etc/shapes/boston_tracts.shp",+ package = "spdep")[1], ID = "poltract", proj4string = CRS(paste("+proj=longlat 
++ datum=NAD27 ",+ "+no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat")))> boston_nb <- poly2nb(boston.tr)> censored <- boston.tr$CMEDV == 50> boston.c <- boston.tr[!censored, ]> boston_nb_1 <- subset(boston_nb, !censored)> lw <- nb2listw(boston_nb_1, style = "W")> n <- nrow(boston.c)> boston.c$idx <- 1:n> W <- as(as_dgRMatrix_listw(lw), "CsparseMatrix")Boston housing data: ML estimationFirst of all, we will fit the spatial econometrics models using maximum likelihood
+Bayesian estimates should be similar (under vague priors)
+> f1 <- log(CMEDV) ~ CRIM + ZN + INDUS + CHAS + I(NOX^2) + I(RM^2) + + AGE + log(DIS) + log(RAD) + TAX + PTRATIO + B + log(LSTAT)> mmatrix <- model.matrix(f1, boston.c)> mmatrix2 <- cbind(mmatrix, create_WX(mmatrix, lw, prefix = "lag"))> m1 <- errorsarlm(f1, boston.c, lw)> m2 <- lagsarlm(f1, boston.c, lw)> m3 <- lagsarlm(f1, boston.c, lw, type = "mixed")> summary(m1)> summary(m2)> summary(m3)Boston housing data: INLAHere we define some of the parameters to be used in the definition of the priors
+> zero.variance = list(prec = list(initial = 25, fixed = TRUE)) > e = eigenw(lw)> re.idx = which(abs(Im(e)) < 1e-06)> rho.max = 1/max(Re(e[re.idx]))> rho.min = 1/min(Re(e[re.idx]))> rho = mean(c(rho.min, rho.max))> betaprec <- 1e-04> Q.beta = Diagonal(n = ncol(mmatrix), x = 1)> Q.beta = betaprec * Q.beta> Q.beta2 = Diagonal(n = ncol(mmatrix2), x = 1) > Q.beta2 = betaprec * Q.beta2Boston housing data: INLAThen we set the lists of parameters for the slm model and the other hyperparameters in the model
+args.slm = list(rho.min = rho.min, rho.max = rho.max, W = W, X = matrix(0, nrow(mmatrix), 0), Q.beta = matrix(1, 0, 0))hyper.slm = list(prec = list(prior = "loggamma", param = c(0.01, 0.01)), rho = list(initial = 0, prior = "logitbeta", param = c(1, 1)))Boston housing data: INLAAnd this is how the SEM, SLM and SDM models are fitted using R-INLANote how the call to inla() is similar to other functions used in R to fit generalized linear models
+> semm1 <- inla(log(CMEDV) ~ CRIM + ZN + INDUS + CHAS + I(NOX^2) ++ I(RM^2) + AGE + log(DIS) + log(RAD) + TAX + PTRATIO + B ++ log(LSTAT) + f(idx, model = "slm", args.slm = args.slm, hyper = hyper.slm),+ data = as(boston.c, "data.frame"), family = "gaussian", control.family = list(hyper = zero.variance),+ control.compute = list(dic = TRUE, cpo = TRUE))> slmm1 <- inla(log(CMEDV) ~ -1 + f(idx, model = "slm", args.slm = list(rho.min = rho.min,+ rho.max = rho.max, W = W, X = mmatrix, Q.beta = Q.beta),+ hyper = hyper.slm), data = as(boston.c, "data.frame"), family = "gaussian",+ control.family = list(hyper = zero.variance), control.compute = list(dic = TRUE,+ cpo = TRUE))> sdmm1 <- inla(log(CMEDV) ~ -1 + f(idx, model = "slm", args.slm = list(rho.min = rho.min,+ rho.max = rho.max, W = W, X = mmatrix2, Q.beta = Q.beta2),+ hyper = hyper.slm), data = as(boston.c, "data.frame"), family =+ control.family = list(hyper = zero.variance), control.compute =+ cpo = TRUE))"gaussian", list(dic = TRUE,Boston housing data: spatial autocorrelation
+INLA reports the values of ρ in the (0,1) intervalThey need to be re-scaled to the (rho.min,rho.max) intervalWe will use inla.tmarginal() to transform the reported marginalinla.zmarginal() can be used to report summary statistics from a marginal> ff <- function(z) {
+	z*(rho.max - rho.min) + rho.min
+}> semmarg <- inla.tmarginal(ff, semm1$marginals.hyperpar[[2]])
+
+> slmmarg <- inla.tmarginal(ff, slmm1$marginals.hyperpar[[2]]) 
+
+> sdmmarg <- inla.tmarginal(ff, sdmm1$marginals.hyperpar[[2]])
+
+> inla.zmarginal(semmarg, TRUE) 
+
+> inla.zmarginal(slmmarg, TRUE) 
+
+> inla.zmarginal(sdmmarg, TRUE)Boston housing data: Estimates of ρ
+
+Boston housing data: Display resultsExample: New Orleans business data
+In this example we will look at the data analyzed in LeSage et al. (2011) regarding the probability of re-opening a business in the aftermath of hurricane Katrina. In this case we have a non-Gaussian model because we are modeling a probability and the response variable can take either 1 (the business re-opened) or 0 (the business didn’t re-open). Similarly as in the previous example, we have fitted four models. However, now we have used a GLM with a Binomial family and a probit link.
+LeSage et al. (2011) split the data into four periods according to different time frames. In our analysis we will focus on the first period, i.e., the business re-opened during the first 3 months (90 days). The model used therein is the one that we have termed Spatial Lag Model in this paper.New Orleans business data: Adjacency matrix
+New Orleans business data: Load data
+Data from spatialprobit package
+Adjanecy matrix computed using k-nearest neighbors (with k = 11)
+> library(INLA)> library(parallel)> library(spdep)> library(spatialprobit)> data(Katrina)> n <- nrow(Katrina)> Katrina$idx <- 1:n> nb <- knn2nb(knearneigh(cbind(Katrina$lat, Katrina$long), k = 11)) > listw <- nb2listw(nb, style = "W")> W1 <- as(as_dgRMatrix_listw(listw), "CsparseMatrix")New Orleans business data: INLA
+Here we define some of the parameters to be used in the definition of the priors
+> f1 <- y1 ~ 1 + flood_depth + log_medinc + small_size + large_size ++ low_status_customers + high_status_customers + owntype_sole_proprietor ++ owntype_national_chain> mm <- model.matrix(f1, Katrina)> mm2 <- cbind(mm, as.matrix(W1) %*% mm[, -1])> zero.variance = list(prec = list(initial = 25, fixed = TRUE))> e = eigen(W1)$values> re.idx = which(abs(Im(e)) < 1e-06)> rho.max = 1/max(Re(e[re.idx]))> rho.min = 1/min(Re(e[re.idx]))> rho = mean(c(rho.min, rho.max))> betaprec1 <- 1e-04> Q.beta1 = Diagonal(n = ncol(mm), x = 1)> Q.beta1 = betaprec1 * Q.beta1> Q.beta2 = Diagonal(n = ncol(mm2), x = 1)> Q.beta2 = betaprec1 * Q.beta2New Orleans business data: INLA
+Here we define some of the parameters to be used in the definition of the slm model and the priors of the hyperparameters> args.slm = list(rho.min = rho.min, rho.max = rho.max, W = W1, + X = matrix(0, nrow(mm), 0), Q.beta = matrix(1, 0, 0))> hyper.slm = list(prec = list(initial = log(1), fixed = TRUE), + rho = list(prior = "logitbeta", param = c(1, 1)))New Orleans business data: INLAHere we fit different models using a spatial probit model
+This link is continuous (inverse of Gaussian cdf)
+Some authors use a broken-stick model
+semm1 <- inla(update(f1, ~. + f(idx, model = "slm", args.slm = args.slm, hyper = hyper.slm)), data = Katrina, family = "binomial", control.family = list(link = "probit", hyper = zero.variance), control.compute = list(dic = TRUE, cpo = TRUE))slmm1 <- inla(y1 ~ -1 + f(idx, model = "slm", args.slm = list(rho.min = rho.min, rho.max = rho.max, W = W1, X = mm, Q.beta = Q.beta1), hyper = hyper.slm), data = Katrina, family = "binomial", control.family = list(link = "probit",hyper = zero.variance), control.compute = list(dic = TRUE,cpo = TRUE))sdmm1 <- inla(y1 ~ -1 + f(idx, model = "slm", args.slm = list(rho.min = rho.min,rho.max = rho.max, W = W1, X = mm2, Q.beta = Q.beta2), hyper = hyper.slm), data = Katrina, family = "binomial", control.family = list(link = "probit",hyper = zero.variance), control.compute = list(dic = TRUE, cpo = TRUE))New Orleans business data: spatial autocorrelation
+> ff <- function(z) {+ z * (rho.max - rho.min) + rho.min+}> semmarg <- inla.tmarginal(ff, semm1$marginals.hyperpar[[1]]) 
+> slmmarg <- inla.tmarginal(ff, slmm1$marginals.hyperpar[[1]]) 
+> sdmmarg <- inla.tmarginal(ff, sdmm1$marginals.hyperpar[[1]])
+Other issues and current workImpacts are difficult to compute as their are based on bivariate inference:
+∂y[i]/∂x′[v, j]
+
+Exploit INLA for bivariate inference
+Computational issues with INLA with the Probit model
+Simulations to assess differences between GLMs and Spatial Econometrics models
+Develop R code similar to the Spatial Econometrics Toolbox (GSoc project) to compare with our results with INLAReferences
+Haining, R. (2003). Spatial Data Analysis: Theory and Practice. Cambridge University Press.Harrison, D. and D. L. Rubinfeld (1978). Hedonic housing prices and the demand for clean air. Journal of Environmental Economics and Management 5, 81–102.LeSage, J. P., K. R. Pace, N. Lam, R. Campanella, and X. Liu (2011). New Orleans business recovery in the aftermath of Hurricane Katrina. Journal of the Royal Statistical Society: Series A (Statistics in Society) 174, 1007–1027.Pace, R. K. and O. W. Gilley (1997). Using the spatial configuration of the data to improve estimation. Journal of the Real Estate Finance and Economics 14, 333–340.Rue, H., S. Martino, and N. Chopin (2009). Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society, Series B 71(Part 2), 319–392.
