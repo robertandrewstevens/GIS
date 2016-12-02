@@ -48,7 +48,7 @@ set_ReplCRS_warn(FALSE)
 ###################################################
 ### code chunk number 16: cm2.Rnw:406-409
 ###################################################
-olinda <- readOGR(".", "olinda1")
+olinda <- readOGR(".", "olinda1", integer64="allow.loss")
 proj4string(olinda) <- CRS("+init=epsg:4674")
 olinda_utm <- spTransform(olinda, CRS("+init=epsg:31985"))
 

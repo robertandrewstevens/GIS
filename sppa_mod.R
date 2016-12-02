@@ -89,7 +89,9 @@ legend("bottomright", legend=c("controls", "cases", "pollution sources"), pch=c(
 ### code chunk number 19: sppa.Rnw:547-557 (eval = FALSE)
 ###################################################
 set.seed(120109)
-r <- seq(0, sqrt(2)/6, by = 0.005)
+# spatstat 1.45-0 enforce a tighter spacing of the r vector 2016-03-22
+# r <- seq(0, sqrt(2)/6, by = 0.005)
+r <- seq(0, sqrt(2)/6, by = 0.001)
 envjap <- envelope(as(spjpines1, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
 envred <- envelope(as(spred, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
 envcells <- envelope(as(spcells, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)

@@ -581,7 +581,11 @@ krige(log(zinc)~1, meuse0, meuse[1,], v.fit)
 ###################################################
 ### code chunk number 85: geos.Rnw:2333-2335
 ###################################################
-setL <- list(cn_max=1e10)
+if (packageDescription("gstat")$Version < "1.1-1") {
+    setL <- list(cn_max=1e10)
+} else {
+    setL <- list(choleski = 0)
+}
 krige(log(zinc)~1, meuse.dup, meuse[1,], v.fit, set = setL)
 
 

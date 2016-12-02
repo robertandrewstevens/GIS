@@ -117,7 +117,7 @@ ogrInfo(".", "scot")
 ###################################################
 ### code chunk number 37: die.Rnw:791-794
 ###################################################
-scot_LL <- readOGR(dsn=".", layer="scot")
+scot_LL <- readOGR(dsn=".", layer="scot", integer64="allow.loss")
 proj4string(scot_LL)
 proj4string(scot_LL) <- CRS("+proj=longlat +ellps=WGS84")
 

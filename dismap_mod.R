@@ -194,7 +194,8 @@ set.seed(1)
 # CARBayes_3.0
 #pgcarbayes <- independent.re(formula = Observed ~ offset(log(Expected)), data=nc, family="poisson", burnin=5000, n.sample=10000, verbose=FALSE)
 # CARBayes 4.0
-pgcarbayes <- S.independent(formula = Observed ~ offset(log(Expected)), data=nc, family="poisson", burnin=5000, n.sample=10000, verbose=FALSE)
+# CARBayes 4.4 S.independent withdrawn
+#pgcarbayes <- S.independent(formula = Observed ~ offset(log(Expected)), data=nc, family="poisson", burnin=5000, n.sample=10000, verbose=FALSE)
 
 
 ###################################################
@@ -203,13 +204,14 @@ pgcarbayes <- S.independent(formula = Observed ~ offset(log(Expected)), data=nc,
 nc$PGBAYESX <- pgbayesx$fitted.values[order(pgbayesx$bayesx.setup$order),2]/nc$Expected
 #nc$PGINLA <- pginla$summary.fitted.values$mean/nc$Expected
 #nc$PGCARBAYES <- pgcarbayes$fitted.values[,1]/nc$Expected
-nc$PGCARBAYES <- pgcarbayes$fitted.values/nc$Expected
+#nc$PGCARBAYES <- pgcarbayes$fitted.values/nc$Expected
 
 
 ###################################################
 ### code chunk number 41: dismap.Rnw:1313-1322
 ###################################################
-print(spplot(nc, c("PGBAYESX", "PGCARBAYES"),
+print(spplot(nc, c("PGBAYESX"#, "PGCARBAYES"
+),
  col.regions=cols,  at=brks, axes = TRUE))
 
 
@@ -516,9 +518,9 @@ load("brainNM.RData")
 #nmf <- slot(brainst, "sp")
 
 obs <- xts(brainst@data$Observed,
-   as.Date(as.character(brainst@data$Year), format="%Y") )
+   as.Date(paste(as.character(brainst@data$Year), "-01-01", sep="")))
 expt <- xts(brainst@data$Expected,
-   as.Date(as.character(brainst@data$Year), format="%Y") )
+   as.Date(paste(as.character(brainst@data$Year), "-01-01", sep="")))
 
 obsy <- apply.yearly(obs, sum)
 expty <- apply.yearly(expt, sum)
