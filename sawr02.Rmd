@@ -72,7 +72,7 @@ typeof(x)
 
 where typeof returns the storage mode of the object in variable x. It is the class of the object that determines the method that will be used to handle it; if there is no specific method for that class, it may be passed to a default method. These methods are also known as generic functions, often including at least print, plot, and summary methods. In the case of the print method, numeric is not provided for explicitly, and so the default method is used. The plot method, as its name suggests, will use the current graphics device to make a visual display of the object, dispatching to a specific method for the object class if provided. In comparison with the print method, the summary method provides a qualified view of the data, highlighting the key features of the object.
 
-When the S language was first introduced, it did not use class/method mechanisms at all. They were introduced in Chambers and Hastie (1992) and S version 3, in a form that is known as S3 classes or old-style classes. These classes were not formally defined, and ‘just grew’; the vast majority of objects returned by model fitting functions belong to old-style classes. Using a non- spatial example from the standard data set cars, we can see that it is an object of class data.frame, stored in a list, which is a vector whose components can be arbitrary objects; data.frame has both names and summary methods:
+When the S language was first introduced, it did not use class/method mechanisms at all. They were introduced in Chambers and Hastie (1992) and S version 3, in a form that is known as S3 classes or old-style classes. These classes were not formally defined, and ‘just grew’; the vast majority of objects returned by model fitting functions belong to old-style classes. Using a non-spatial example from the standard data set cars, we can see that it is an object of class data.frame, stored in a list, which is a vector whose components can be arbitrary objects; data.frame has both names and summary methods:
 
 ```{r, comment=NA}
 class(cars)
@@ -101,7 +101,7 @@ These objects are typically used as the first argument to model fitting function
 lm(dist ~ speed, data = cars)
 ```
 
-This is a simple example, but very much more can be done with the formula abstraction. If we create a factor for the speed variable by cutting it at its quartiles, we can contrast how the plot method displays the relationship be- tween two numerical variables and a numerical variable and a factor (shown in **Figure 2.1**):
+This is a simple example, but very much more can be done with the formula abstraction. If we create a factor for the speed variable by cutting it at its quartiles, we can contrast how the plot method displays the relationship between two numerical variables and a numerical variable and a factor (shown in **Figure 2.1**):
 
 ```{r, comment=NA}
 cars$qspeed <- cut(cars$speed, breaks = quantile(cars$speed), include.lowest = TRUE)
@@ -241,7 +241,7 @@ We described data frames on p. 25, and we now show how our SpatialPoints object 
 str(row.names(CRAN_df))
 ```
 
-What we would like to do is to associate the correct rows of our data frame object with ‘their’ point coordinates – it often happens that data are collected from different sources, and the two need to be merged. The SpatialPointsDataFrame class is the container for this kind of spatial point information, and can be constructed in a number of ways, for example from a data frame and a matrix of coordinates. If the matrix of point coordinates has row names and the match.ID argument is set to its default value of TRUE, then the matrix row names are checked against the row names of the data frame. If they match, but are not in the same order, the data frame rows are re-ordered to suit the points. If they do not match, no SpatialPointsDataFrame is constructed. Note that the new object takes two indices, the first for the spatial object, the second, if given, for the column. Giving a single index number, or range of numbers, or column name or names returns a new SpatialPointsDataFrame with the requested columns. Using other extraction operators, especially the $ operator, returns the data frame column referred to. These operators mimic the equivalent ones for other standard S classes as far as possible.
+What we would like to do is to associate the correct rows of our data frame object with ‘their’ point coordinates – it often happens that data are collected from different sources, and the two need to be merged. The SpatialPointsDataFrame class is the container for this kind of spatial point information, and can be constructed in a number of ways, for example from a data frame and a matrix of coordinates. If the matrix of point coordinates has row names and the match.ID argument is set to its default value of TRUE, then the matrix row names are checked against the row names of the data frame. If they match, but are not in the same order, the data frame rows are reordered to suit the points. If they do not match, no SpatialPointsDataFrame is constructed. Note that the new object takes two indices, the first for the spatial object, the second, if given, for the column. Giving a single index number, or range of numbers, or column name or names returns a new SpatialPointsDataFrame with the requested columns. Using other extraction operators, especially the $ operator, returns the data frame column referred to. These operators mimic the equivalent ones for other standard S classes as far as possible.
 
 ```{r, comment=NA}
 CRAN_spdf1 <- SpatialPointsDataFrame(CRAN_mat, CRAN_df, 
@@ -251,7 +251,7 @@ str(CRAN_spdf1$loc)
 str(CRAN_spdf1[["loc"]])
 ```
 
-If we re-order the data frame at random using sample, we still get the same result, because the data frame is re-ordered to match the row names of the points:
+If we reorder the data frame at random using sample, we still get the same result, because the data frame is reordered to match the row names of the points:
 
 ```{r, comment=NA}
 s <- sample(nrow(CRAN_df))
@@ -279,7 +279,7 @@ SpatialPoints
 coords.nrs data
 Spatial
 bbox proj4string
-￼￼SpatialPoints
+SpatialPoints
 coords
 Spatial
 data.frame
@@ -333,7 +333,7 @@ turtle_df <- read.csv("seamap105_mod.csv")
 summary(turtle_df)
 ```
 
-Before creating a SpatialPointsDataFrame, we will timestamp the observations, and re-order the input data frame by timestamp to make it easier to add months to **Figure 2.3**, to show progress westwards across the Pacific:
+Before creating a SpatialPointsDataFrame, we will timestamp the observations, and reorder the input data frame by timestamp to make it easier to add months to **Figure 2.3**, to show progress westwards across the Pacific:
 
 August July
 June May

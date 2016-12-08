@@ -1,8 +1,8 @@
-6
-Customising Spatial Data Classes and Methods
-￼Although the classes defined in the sp package cover many needs, they do not go far beyond the most typical GIS data models. In applied research, it often happens that customised classes would suit the actual data coming from the instruments better. Since S4 classes have mechanisms for inheritance, it may be attractive to build on the sp classes, so as to utilise their methods where appropriate. Here, we demonstrate a range of different settings in which sp classes can be extended. Naturally, this is only useful for researchers with specific and clear needs, so our goal is to show how (relatively) easy it may be to prototype classes extending sp classes for specific purposes.
+6 Customizing Spatial Data Classes and Methods
+
+Although the classes defined in the sp package cover many needs, they do not go far beyond the most typical GIS data models. In applied research, it often happens that customized classes would suit the actual data coming from the instruments better. Since S4 classes have mechanisms for inheritance, it may be attractive to build on the sp classes, so as to utilize their methods where appropriate. Here, we demonstrate a range of different settings in which sp classes can be extended. Naturally, this is only useful for researchers with specific and clear needs, so our goal is to show how (relatively) easy it may be to prototype classes extending sp classes for specific purposes.
 6.1 Programming with Classes and Methods
-This section explains the elementary basics of programming with classes and methods in R. The S language (implemented in R and S-PLUSTM) contains two mechanisms for creating classes and methods: the traditional S3 system and the more recent S4 system (see Sect.2.2, in which classes were described for the useR – here they are described for the developeR). This chapter is not a full introduction to R programming (see Braun and Murdoch (2007) for more details), but it will try to give some feel of how the Spatial classes in package sp can be extended to be used for wider classes of problems. For full details, the interested reader is referred to, for example, Venables and Ripley (2000) and Chambers (1998), the latter being a reference for new-style S4 classes and methods. Example code is, for example, to be found in the source code for package sp, available from CRAN.
+This section explains the elementary basics of programming with classes and methods in R. The S language (implemented in R and S-PLUS) contains two mechanisms for creating classes and methods: the traditional S3 system and the more recent S4 system (see Sect.2.2, in which classes were described for the useR – here they are described for the developeR). This chapter is not a full introduction to R programming (see Braun and Murdoch (2007) for more details), but it will try to give some feel of how the Spatial classes in package sp can be extended to be used for wider classes of problems. For full details, the interested reader is referred to, for example, Venables and Ripley (2000) and Chambers (1998), the latter being a reference for new-style S4 classes and methods. Example code is, for example, to be found in the source code for package sp, available from CRAN.
 Suppose we define myfun as
 > myfun <- function(x) { + x+2
 +}
@@ -82,7 +82,7 @@ The S3 class mechanism is simple and powerful. Much of R works with it, includin
 [1] "data.frame"
 > class(lm(log(zinc) ~ sqrt(dist), meuse))
 [1] "lm"
-There is, however, no checking that a class with a particular name does in- deed contain the elements that a certain method for it expects. It also has design flaws, as method specification by dot separation is ambiguous in case of names such as as.data.frame, where one cannot tell whether it means that the method as.data acts on objects of class frame, or the method as acts on objects of class data.frame, or none of them (the answer is: none). For such reasons, S4-style classes and methods were designed.
+There is, however, no checking that a class with a particular name does indeed contain the elements that a certain method for it expects. It also has design flaws, as method specification by dot separation is ambiguous in case of names such as as.data.frame, where one cannot tell whether it means that the method as.data acts on objects of class frame, or the method as acts on objects of class data.frame, or none of them (the answer is: none). For such reasons, S4-style classes and methods were designed.
 130 6 Customising Spatial Data Classes and Methods
 6.1.2 S4-Style Classes and Methods
 S4-style classes are formally defined using setClass. As an example, somewhat simplified versions of classes CRS and Spatial in sp are
@@ -141,7 +141,7 @@ coords        bbox
 matrix      matrix
 6.2 Animal Track Data in Package Trip 131
 SpatialPointsDataFrame class by a length 2 character vector carrying the names of the time column and the trip identifier column in the SpatialPoints DataFrame attribute table.
-Package trip does a lot of work to read and analyse tracking data from data formats typical for tracking data (Argos DAT), removing duplicate ob- servations and validating the objects, for example checking that time stamps increase and movement speeds are realistic. We ignore this and stick to the bare bones.
+Package trip does a lot of work to read and analyze tracking data from data formats typical for tracking data (Argos DAT), removing duplicate observations and validating the objects, for example checking that time stamps increase and movement speeds are realistic. We ignore this and stick to the bare bones.
 We now define a class called trip that extends SpatialPointsDataFrame:
 > library(sp)
 > setClass("trip", representation("SpatialPointsDataFrame",
@@ -160,7 +160,7 @@ Class "SpatialPointsDataFrame", directly
 Class "SpatialPoints", by class "SpatialPointsDataFrame", distance 2 Class "Spatial", by class "SpatialPointsDataFrame", distance 3
 which checks, upon creation of objects, that indeed two variable names are passed and that these names refer to variables present in the attribute table.
 6.2.1 Generic and Constructor Functions
-It would be nice to have a constructor function, just like data.frame or Spa- tialPoints, and so we now create it and set it as the generic function to be called in case the first argument is of class SpatialPointsDataFrame.
+It would be nice to have a constructor function, just like data.frame or SpatialPoints, and so we now create it and set it as the generic function to be called in case the first argument is of class SpatialPointsDataFrame.
 > + + +
 trip.default <- function(obj, TORnames) { if (!is(obj, "SpatialPointsDataFrame"))
         stop("trip only supports SpatialPointsDataFrame")
@@ -259,7 +259,7 @@ Max.   :2.000
 (Other)            :388
 6.2 Animal Track Data in Package Trip 133
 6.2.2 Methods for Trip Objects
-The summary method here is not defined for trip, but is the default sum- mary inherited from class Spatial. As can be seen, nothing special about the trip features is mentioned, such as what the time points are and what the identifiers. We could alter this by writing a class-specific summary method
+The summary method here is not defined for trip, but is the default summary inherited from class Spatial. As can be seen, nothing special about the trip features is mentioned, such as what the time points are and what the identifiers. We could alter this by writing a class-specific summary method
 > summary.trip <- function(object, ...) {
 +
 +
@@ -297,8 +297,8 @@ A custom plot method for trip could be written, for example using colour to deno
 Here, the col argument is added to the function header so that a reasonable
 default can be overridden, for example for black/white plotting.
 6.3 Multi-Point Data: SpatialMultiPoints
-One of the feature types of the OpenGeospatial Consortium (OGC) simple feature specification that has not been implemented in sp is the MultiPoint object. In a MultiPoint object, each feature refers to a set of points. The sp classes SpatialPointsDataFrame only provide reference to a single point. Instead of building a new class up from scratch, we try to re-use code and build a class SpatialMultiPoint from the SpatialLines class. After all, lines are just sets of ordered points.
-In fact, the SpatialLines class implements the MultiLineString simple fea- ture, where each feature can refer to multiple lines. A special case is formed
+One of the feature types of the OpenGeospatial Consortium (OGC) simple feature specification that has not been implemented in sp is the MultiPoint object. In a MultiPoint object, each feature refers to a set of points. The sp classes SpatialPointsDataFrame only provide reference to a single point. Instead of building a new class up from scratch, we try to reuse code and build a class SpatialMultiPoint from the SpatialLines class. After all, lines are just sets of ordered points.
+In fact, the SpatialLines class implements the MultiLineString simple feature, where each feature can refer to multiple lines. A special case is formed
 if each feature only has a single line:
 > setClass("SpatialMultiPoints", representation("SpatialLines"),
 setMethod("lines", signature(x = "trip"), function(x, ..., col = NULL) {
@@ -358,7 +358,7 @@ plot(as(x, "Spatial"), ...)
 for (i in 1:n) points(x@lines[[i]]@Lines[[1]]@coords,
 pch = pch[i], col = col[i], cex = cex[i])
 136 6 Customising Spatial Data Classes and Methods
-Having pch, cex, and col arrays, the length of the number of MultiPoints sets rather than the number of points to be plotted is useful for two rea- sons. First, the whole point of MultiPoints object is to distinguish sets of points. Second, when we extend this class to SpatialMultiPointsDataFrame, for example by
+Having pch, cex, and col arrays, the length of the number of MultiPoints sets rather than the number of points to be plotted is useful for two reasons. First, the whole point of MultiPoints object is to distinguish sets of points. Second, when we extend this class to SpatialMultiPointsDataFrame, for example by
 > cName <- "SpatialMultiPointsDataFrame"
 > setClass(cName, representation("SpatialLinesDataFrame"),
 +
@@ -385,9 +385,9 @@ y = "missing"), function(x, y, ...) plot.SpatialMultiPoints(x, ...))
 for which the plot is shown in Fig. 6.1.
 −2 −1 0 1
 Fig. 6.1. Plot of the SpatialMultiPointsDataFrame object
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼−0.4 0.0
+−0.4 0.0
 6.4 Hexagonal Grids
-Hexagonal grids are like square grids, where grid points are centres of matching hexagons, rather than squares. Package sp has no classes for hexagonal grids, but does have some useful functions for generating and plotting them. This could be used to build a class. Much of this code in sp is based on postings to the R-sig-geo mailing list by Tim Keitt, used with permission.
+Hexagonal grids are like square grids, where grid points are centers of matching hexagons, rather than squares. Package sp has no classes for hexagonal grids, but does have some useful functions for generating and plotting them. This could be used to build a class. Much of this code in sp is based on postings to the R-sig-geo mailing list by Tim Keitt, used with permission.
 The spatial sampling method spsample has a method for sampling points on a hexagonal grid:
 > data(meuse.grid)
 > gridded(meuse.grid) = ~x + y
@@ -410,14 +410,14 @@ for which the plots are shown in Fig. 6.2.
 1.0
 0.8
 0.6
-0.4 ￼ 0.4 0.2 ￼ 0.2 0.0 ￼ 0.0
+0.4  0.4 0.2  0.2 0.0  0.0
 Fig. 6.2. Hexagonal points (left) and polygons (right)
 6.4 Hexagonal Grids 137
-￼￼￼￼￼￼1.0 0.8 0.6
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼
+1.0 0.8 0.6
+
 138 6 Customising Spatial Data Classes and Methods
 We can now generate and plot hexagonal grids, but need to deal with two representations: as points and as polygons, and both representations do not tell by themselves that they represent a hexagonal grid.
-For designing a hexagonal grid class we extend SpatialPoints, assuming that computation of the polygons can be done when needed without a pro- hibitive overhead.
+For designing a hexagonal grid class we extend SpatialPoints, assuming that computation of the polygons can be done when needed without a prohibitive overhead.
 > setClass("SpatialHexGrid", representation("SpatialPoints",
 + dx = "numeric"), validity <- function(object) {
 +     if (object@dx <= 0)
@@ -437,7 +437,7 @@ dx = "numeric"), validity <- function(object) { if (object@dx <= 0)
           TRUE
 [1] "SpatialHexGridDataFrame"
 Note that these class definitions do not check that instances actually do form valid hexagonal grids; a more robust implementation could provide a test that distances between points with equal y coordinate are separated by a multiple of dx, that the y-separations are correct and so on.
-It might make sense to adapt the generic spsample method in package sp to return SpatialHexGrid objects; we can also add plot and spsample methods for them. Method overlay should work with a SpatialHexGrid as its first ar- gument, by inheriting from SpatialPoints. Let us first see how to create the new classes. Without a constructor function we can use
+It might make sense to adapt the generic spsample method in package sp to return SpatialHexGrid objects; we can also add plot and spsample methods for them. Method overlay should work with a SpatialHexGrid as its first argument, by inheriting from SpatialPoints. Let us first see how to create the new classes. Without a constructor function we can use
 > HexPts <- spsample(meuse.grid, type = "hexagonal", cellsize = 200) > Hex <- new("SpatialHexGrid", HexPts, dx = 200)
 > df <- as.data.frame(meuse.grid)[overlay(meuse.grid, Hex),
 +]
@@ -489,10 +489,10 @@ y 329601.5 333585.3
         min      max
 r1 178450.0 181550.0
 r2 329486.1 333700.7
-One solution for this is to correct for this in a constructor function, and check for it in the validity test. Explicit coercion functions to the points representa- tion would have to set the bounding box back to the points ranges. Another solution is to write a bbox method for the hexgrid classes, taking the risk that someone still looks at the incorrect bbox slot.
+One solution for this is to correct for this in a constructor function, and check for it in the validity test. Explicit coercion functions to the points representation would have to set the bounding box back to the points ranges. Another solution is to write a bbox method for the hexgrid classes, taking the risk that someone still looks at the incorrect bbox slot.
 6.5 Spatio-Temporal Grids
-Spatio-temporal data can be represented in different ways. One simple option is when observations (or model-results, or predictions) are given on a regular space–time grid.
-Objects of class or extending SpatialPoints, SpatialPixels, and Spa- tialGrid do not have the constraint that they represent a two-dimensional space; they may have arbitrary dimension; an example for a three-dimensional grid is
+Spatio-temporal data can be represented in different ways. One simple option is when observations (or model results, or predictions) are given on a regular space–time grid.
+Objects of class or extending SpatialPoints, SpatialPixels, and SpatialGrid do not have the constraint that they represent a two-dimensional space; they may have arbitrary dimension; an example for a three-dimensional grid is
 > n <- 10
 > x <- data.frame(expand.grid(x1 = 1:n, x2 = 1:n, x3 = 1:n), + z = rnorm(n^3))
 > coordinates(x) <- ~x1 + x2 + x3
@@ -679,20 +679,20 @@ printed; one can refer to the help of
 shown in Fig.6.3. The format argument passed controls the way time is
 > `?`(as.character.POSIXt)
 for more details about the format argument.
-6.6 Analysing Spatial Monte Carlo Simulations
-Quite often, spatial statistical analysis results in a large number of spatial realisations of a random field, using some Monte Carlo simulation approach. Regardless whether individual values refer to points, lines, polygons, or grid cells, we would like to write some methods or functions that aggregate over these simulations, to get summary statistics such as the mean value, quantiles, or cumulative distributions values. Such aggregation can take place in two
+6.6 Analyzing Spatial Monte Carlo Simulations
+Quite often, spatial statistical analysis results in a large number of spatial realizations of a random field, using some Monte Carlo simulation approach. Regardless whether individual values refer to points, lines, polygons, or grid cells, we would like to write some methods or functions that aggregate over these simulations, to get summary statistics such as the mean value, quantiles, or cumulative distributions values. Such aggregation can take place in two
 6.6 Analysing Spatial Monte Carlo Simulations 145
-￼￼￼￼￼00:00:01
+00:00:01
 00:00:02
 00:00:03
 00:00:04
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼00:00:05
+00:00:05
 00:00:06
 00:00:07
 00:00:08
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼00:00:09
+00:00:09
 00:00:10
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼4
+4
 3
 2
 1
@@ -700,8 +700,8 @@ Quite often, spatial statistical analysis results in a large number of spatial r
 −1
 −2
 −3
-Fig. 6.3. spplot for an object of class SpatialTimeGridDataFrame, filled with ran- dom numbers
-ways. Either we aggregate over the probability space and compute summary statistics for each geographical feature over the set of realisations (i.e. the rows of the attribute table), or for each realisation we aggregate over the complete geographical layer or a subset of it (i.e. aggregate over the columns of the attribute table).
+Fig. 6.3. spplot for an object of class SpatialTimeGridDataFrame, filled with random numbers
+ways. Either we aggregate over the probability space and compute summary statistics for each geographical feature over the set of realizations (i.e. the rows of the attribute table), or for each realization we aggregate over the complete geographical layer or a subset of it (i.e. aggregate over the columns of the attribute table).
 Let us first generate, as an example, a set of 100 conditional Gaussian
 simulations for the zinc variable in the meuse data set:
 > library(gstat)
@@ -709,22 +709,22 @@ simulations for the zinc variable in the meuse data set:
 > coordinates(meuse) <- ~x + y
 > v <- vgm(0.5, "Sph", 800, 0.05)
 > sim <- krige(log(zinc) ~ 1, meuse, meuse.grid, v, nsim = 100, + nmax = 30)
-drawing 100 GLS realisations of beta...
+drawing 100 GLS realizations of beta...
 [using conditional Gaussian simulation]
 > sim@data <- exp(sim@data)
 where the last statement back-transforms the simulations from the log scale to the observation scale. A quantile method for Spatial object attributes can be written as
 > quantile.Spatial <- function(x, ..., byLayer = FALSE) {
 +     stopifnot("data" %in% slotNames(x))
 + apply(x@data, ifelse(byLayer, 2, 1), quantile, ...) +}
-￼￼￼
+
 146 6 Customising Spatial Data Classes and Methods
 after which we can find the sample below and above 95% confidence limits by
 > sim$lower <- quantile.Spatial(sim[1:100], probs = 0.025) > sim$upper <- quantile.Spatial(sim[1:100], probs = 0.975)
 To get the sample distribution of the areal median, we can aggregate over layers:
 > medians <- quantile.Spatial(sim[1:100], probs = 0.5, + byLayer = TRUE)
 > hist(medians)
-It should be noted that in these particular cases, the quantities computed by simulations could have been obtained faster and exactly by working analyti- cally with ordinary (block) kriging and the normal distribution (Sect. 8.7.2).
-A statistic that cannot be obtained analytically is the sample distribution of the area fraction that exceeds a threshold. Suppose that 500 is a crucial threshold, and we want to summarise the sampling distribution of the area fraction where 500 is exceeded:
+It should be noted that in these particular cases, the quantities computed by simulations could have been obtained faster and exactly by working analytically with ordinary (block) kriging and the normal distribution (Sect. 8.7.2).
+A statistic that cannot be obtained analytically is the sample distribution of the area fraction that exceeds a threshold. Suppose that 500 is a crucial threshold, and we want to summarize the sampling distribution of the area fraction where 500 is exceeded:
 > over500 <- 1 - fractionBelow(sim[1:100], 200, byLayer = TRUE) > summary(over500)
 Min. 1st Qu. Median Mean 3rd Qu. Max. 0.6007 0.6768 0.6911 0.6897 0.7071 0.7448
 > quantile(over500, c(0.025, 0.975))
@@ -732,7 +732,7 @@ Min. 1st Qu. Median Mean 3rd Qu. Max. 0.6007 0.6768 0.6911 0.6897 0.7071 0.7448
 0.6460361 0.7336529
 For space–time data, we could write methods that aggregate over space, over time, or over space and time.
 6.7 Processing Massive Grids
-Up to now we have made the assumption that gridded data can be completely read and are kept by R in memory. In some cases, however, we need to process grids that exceed the memory capacity of the computers available. A method for analysing grids without fully loading them into memory then seems useful. Note that package rgdal allows for partial reading of grids, for example
+Up to now we have made the assumption that gridded data can be completely read and are kept by R in memory. In some cases, however, we need to process grids that exceed the memory capacity of the computers available. A method for analyzing grids without fully loading them into memory then seems useful. Note that package rgdal allows for partial reading of grids, for example
 > x <- readGDAL("70042108.tif", output.dim = c(120, 132)) > x$band1[x$band1 <= 0] <- NA
 > spplot(x, col.regions = bpy.colors())
 >
@@ -759,7 +759,7 @@ attr(,"package")
 [1] "sp"
 > gridparameters(x.subs)
 cellcentre.offset cellsize cells.dim x 174.20042 0.0008333333 100 y -36.58292 0.0008333333 100
-An object of class GDALReadOnlyDataset contains only a file handle. The subset method "[" for it does not, as it quite often does, return an object of the same class but actually reads the data requested, with arguments interpreted as rows, columns, and raster bands, and returns a SpatialGridDataFrame. We nowextendthisapproachtoallowpartialwritingthrough"[" aswell.Asthe actual code is rather lengthy and involves a lot of administration, it will not all be shown and details can be found in the rgdal source code.
+An object of class GDALReadOnlyDataset contains only a file handle. The subset method "[" for it does not, as it quite often does, return an object of the same class but actually reads the data requested, with arguments interpreted as rows, columns, and raster bands, and returns a SpatialGridDataFrame. We now extend this approach to allow partial writing through "[" as well . As the actual code is rather lengthy and involves a lot of administration, it will not all be shown and details can be found in the rgdal source code.
 We define two classes,
 > setClass("SpatialGDAL", representation("Spatial",
 + grid = "GridTopology", grod = "GDALReadOnlyDataset",
@@ -804,4 +804,4 @@ This chapter has sketched developments beyond the base sp classes and methods us
 setMethod("[", "SpatialGDAL", function(x, i, j, ..., drop = FALSE) x@grod[i = i, j = j, ...])
 setReplaceMethod("[", "SpatialGDALWrite", function(x, i, j, ..., value) {
 ...
-￼
+
