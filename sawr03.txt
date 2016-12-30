@@ -304,9 +304,7 @@ An example of building an sp.layout structure is as follows:
 
 > river <- list("sp.polygons", meuse.sr)
 > north <- list("SpatialPolygonsRescale", layout.north.arrow(), offset = c(178750, 332500), scale = 400)
-> scale <- list("SpatialPolygonsRescale", layout.scale.bar(),
-offset = c(180200, 329800), scale = 1000, fill = c("transparent",
-"black"))
+> scale <- list("SpatialPolygonsRescale", layout.scale.bar(), offset = c(180200, 329800), scale = 1000, fill = c("transparent", "black"))
 > txt1 <- list("sp.text", c(180200, 329950), "0")
 > txt2 <- list("sp.text", c(181200, 329950), "1 km")
 > pts <- list("sp.points", meuse, pch = 3, col = "black") 
