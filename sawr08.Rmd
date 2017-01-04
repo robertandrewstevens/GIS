@@ -342,12 +342,12 @@ attr(v.fit, "SSErr")
 
 Table 8.1. Values for argument fit.method in function fit.variogram
 
-fit.method Weight
----------- ----------------
-1          N[j]
-2          N[j]/{γ(h[j])}^2 
-6          1
-7          N[j]/h[j]^2
+fit.method Weight  
+---------- ----------------  
+1          N[j]  
+2          N[j]/{γ(h[j])}^2  
+6          1  
+7          N[j]/h[j]^2  
 
 Different options for the weights wj are given in Table 8.1, the default value chosen by gstat is 7. Two things should be noted: (i) for option 2, the weights change after each iteration, which may confuse the optimization routine, and (ii) for the linear variogram with no nugget, option 7 is equivalent to option 2. Option 7 is default as it seems to work in many cases; it will, however, give rise to spurious fits when a sample semivariance estimate for distance (very close to) zero gives rise to an almost infinite weight. This may happen when duplicate observations are available.
 
