@@ -87,9 +87,9 @@ The data.frame contains two variables, one recording the speed of the observed c
 str(cars)
 ```
 
-Data frames are containers for data used everywhere in S since their full introduction in Chambers and Hastie (1992, pp. 45–94). Recent and shorter introductions to data frames are given by Crawley (2005, pp. 15–22), Crawley (2007, pp. 107–133), and Dalgaard (2002, pp. 18–19) and in the online documentation (Venables et al., 2008, pp. 27–29 in the R 2.6.2 release). Data frames view the data as a rectangle of rows of observations on columns of values of variables of interest. The representation of the values of the variables of interest can include integer and floating point numeric types, logical, character, and derived classes. One very useful derived class is the factor, which is represented as integers pointing to character levels, such as ‘forest’ or ‘arable’. Printed, the values look like character values, but are not – when a data frame is created, all character variables included in it are converted to factor by default. Data frames also have unique row names, represented as an integer or character vector or as an internal mechanism to signal that the sequence from 1 to the number of rows in the data frame are used. The row.names function is used to access and assign data frame row names.
+Data frames are containers for data used everywhere in S since their full introduction in Chambers and Hastie (1992, pages 45–94). Recent and shorter introductions to data frames are given by Crawley (2005, pages 15–22), Crawley (2007, pages 107–133), and Dalgaard (2002, pages 18–19) and in the online documentation (Venables et al., 2008, pages 27–29 in the R 2.6.2 release). Data frames view the data as a rectangle of rows of observations on columns of values of variables of interest. The representation of the values of the variables of interest can include integer and floating point numeric types, logical, character, and derived classes. One very useful derived class is the factor, which is represented as integers pointing to character levels, such as ‘forest’ or ‘arable’. Printed, the values look like character values, but are not – when a data frame is created, all character variables included in it are converted to factor by default. Data frames also have unique row names, represented as an integer or character vector or as an internal mechanism to signal that the sequence from 1 to the number of rows in the data frame are used. The row.names function is used to access and assign data frame row names.
 
-One of the fundamental abstractions used in R is the formula introduced in Chambers and Hastie (1992, pp. 13–44) – an online summary may be found in Venables et al. (2008, pp. 50–52 in the R 2.6.2 release). The abstraction is intended to make statistical modeling as natural and expressive as possible, permitting the analyst to focus on the substantive problem at hand. Because the formula abstraction is used in very many contexts, it is worth some attention. A formula is most often two-sided, with a response variable to the left of the ∼ (tilde) operator, and in this case a determining variable on the right:
+One of the fundamental abstractions used in R is the formula introduced in Chambers and Hastie (1992, pages 13–44) – an online summary may be found in Venables et al. (2008, pages 50–52 in the R 2.6.2 release). The abstraction is intended to make statistical modeling as natural and expressive as possible, permitting the analyst to focus on the substantive problem at hand. Because the formula abstraction is used in very many contexts, it is worth some attention. A formula is most often two-sided, with a response variable to the left of the ∼ (tilde) operator, and in this case a determining variable on the right:
 
 ```{r, comment=NA}
 class(dist ~ speed)
@@ -121,7 +121,7 @@ lm(dist ~ qspeed, data = cars)
 
 Variables in the formula may also be transformed in different ways, for example using log. The formula is carried through into the object returned by model fitting functions to be used for prediction from new data provided in a data.frame with the same column names as the right-hand side variables, and the same level names if the variable is a factor.
 
-New-style (S4) classes were introduced in the S language at release 4, and in Chambers (1998), and are described by Venables and Ripley (2000, pp. 75–121), and in subsequent documentation installed with R [4]. Old-style classes are most often simply lists with attributes; they are not defined formally. Although users usually do not change values inside old-style classes, there is nothing to stop them doing so, for example changing the representation of coordinates from floating point to integer numbers. This means that functions need to check, among other things, whether components of a class exist, and whether they are represented correctly, before they can be handled. The central advantage of new-style classes is that they have formal definitions that specify the name and type of the components, called slots, that they contain. This simplifies the writing, maintenance, and use of the classes, because their format is known from the definition. For a further discussion of programming for classes and methods, see Section 6.1.
+New-style (S4) classes were introduced in the S language at release 4, and in Chambers (1998), and are described by Venables and Ripley (2000, pages 75–121), and in subsequent documentation installed with R [4]. Old-style classes are most often simply lists with attributes; they are not defined formally. Although users usually do not change values inside old-style classes, there is nothing to stop them doing so, for example changing the representation of coordinates from floating point to integer numbers. This means that functions need to check, among other things, whether components of a class exist, and whether they are represented correctly, before they can be handled. The central advantage of new-style classes is that they have formal definitions that specify the name and type of the components, called slots, that they contain. This simplifies the writing, maintenance, and use of the classes, because their format is known from the definition. For a further discussion of programming for classes and methods, see Section 6.1.
 
 Because the classes provided by the sp package are new-style classes, we will be seeing how such classes work in practice below. In particular, we will be referring to the slots in class definitions; slots are specified in the definition as the representation of what the class contains. Many methods are written for the classes to be introduced in the remainder of this chapter, in particular coercion methods for changing the way an object is represented from one class to another. New-style classes can also check the validity of objects being created, for example to stop the user from filling slots with data that do not conform to the definition.
 
@@ -163,7 +163,7 @@ Spatial(bb, proj4string = CRS("+proj=longlat"))
 
 The SpatialPoints class is the first subclass of Spatial, and a very important one. The extension of SpatialPoints to other subclasses means that explaining how this class works will yield benefits later on. In this section, we also look at methods for Spatial\* objects, and at extending Spatial\* objects to include attribute data, where each spatial entity, here a point, is linked to a row in a data frame. We take Spatial* objects to be subclasses of Spatial, and the best place to start is with SpatialPoints.
 
-A two-dimensional point can be described by a pair of numbers (x, y), defined over a known region. To represent geographical phenomena, the maximum known region is the earth, and the pair of numbers measured in degrees are a geographical coordinate, showing where our point is on the globe. The pair of numbers define the location on the sphere exactly, but if we represent the globe more accurately by an ellipsoid model, such as the World Geodetic System 1984 – introduced after satellite measurements corrected our understanding of the shape of the earth – that position shifts slightly. Geographical coordinates can extend from latitude 90◦ to −90◦ in the north–south direction, and from longitude 0◦ to 360◦ or equivalently from −180◦ to 180◦ in the east–west direction. The Poles are fixed, but where the longitudes fall depends on the choice of prime meridian, most often Greenwich just east of London. This means that geographical coordinates define a point on the earth’s surface unequivocally if we also know which ellipsoid model and prime meridian were used; the concept of datum, relating the ellipsoid to the distance from the centre of the earth, is introduced on p. 82.
+A two-dimensional point can be described by a pair of numbers (x, y), defined over a known region. To represent geographical phenomena, the maximum known region is the earth, and the pair of numbers measured in degrees are a geographical coordinate, showing where our point is on the globe. The pair of numbers define the location on the sphere exactly, but if we represent the globe more accurately by an ellipsoid model, such as the World Geodetic System 1984 – introduced after satellite measurements corrected our understanding of the shape of the earth – that position shifts slightly. Geographical coordinates can extend from latitude 90◦ to −90◦ in the north–south direction, and from longitude 0◦ to 360◦ or equivalently from −180◦ to 180◦ in the east–west direction. The Poles are fixed, but where the longitudes fall depends on the choice of prime meridian, most often Greenwich just east of London. This means that geographical coordinates define a point on the earth’s surface unequivocally if we also know which ellipsoid model and prime meridian were used; the concept of datum, relating the ellipsoid to the distance from the centre of the earth, is introduced on page 82.
 
 Using the standard read.table function, we read in a data file with the positions of CRAN mirrors across the world. We extract the two columns with the longitude and latitude values into a matrix, and use str to view a digest:
 
@@ -235,7 +235,7 @@ An important group of methods for visualization of Spatial\* objects are present
 
 ### 2.4.2 Data Frames for Spatial Point Data
 
-We described data frames on p. 25, and we now show how our SpatialPoints object can be taught to behave like a data.frame. Here we use numbers in sequence to index the points and the rows of our data frame, because neither the place names nor the countries are unique.
+We described data frames on page 25, and we now show how our SpatialPoints object can be taught to behave like a data.frame. Here we use numbers in sequence to index the points and the rows of our data frame, because neither the place names nor the countries are unique.
 
 ```{r, comment=NA}
 str(row.names(CRAN_df))
@@ -274,15 +274,20 @@ CRAN_spdf3 <- SpatialPointsDataFrame(CRAN_mat, CRAN_df1, proj4string = llCRS,
 
 Let us examine the contents of objects of the SpatialPointsDataFrame class, shown in **Figure 2.2**. Because the class extends SpatialPoints, it also inherits the information contained in the Spatial class object. The data slot is where the information from the data frame is kept, in a data.frame object.
 
-SpatialPointsDataFrame
-SpatialPoints
-coords.nrs data
-Spatial
-bbox proj4string
-SpatialPoints
-coords
-Spatial
-data.frame
+- **SpatialPointsDataFrame**
+    + **SpatialPoints**
+    + coords.nrs 
+    + data
+
+- **Spatial**
+    + bbox 
+    + proj4string
+
+- **SpatialPoints**
+    + coords
+    + **Spatial**
+    
+- **data.frame**
 
 **Figure 2.2**. Spatial points classes and their slots; arrows show subclass extensions
 
@@ -335,15 +340,6 @@ summary(turtle_df)
 
 Before creating a SpatialPointsDataFrame, we will timestamp the observations, and reorder the input data frame by timestamp to make it easier to add months to **Figure 2.3**, to show progress westwards across the Pacific:
 
-August July
-June May
-April
-March February
-January December
-November
-October September
-20°N 30°N 40°N 50°N 60°N
-
 **Figure 2.3**. Westward movements of a captive-raised adult loggerhead turtle (Caretta caretta) from 10 August 1996 to 12 August 1997 
 
 ```{r, comment=NA}
@@ -360,7 +356,7 @@ The input data file is as downloaded, but without columns with identical values 
 
 ## 2.5 SpatialLines
 
-Lines have been represented in S in a simple form as a sequence of points (see Becker et al. (1988), Murrell (2006, pp. 83–86)), based on lowering the graphic ‘pen’ at the first point and drawing to the successive points until an NA is met. Then the pen is raised and moved to the next non-NA value, where it is lowered, until the end of the set of points. While this is convenient for graphics output, it is less so for associating lines with data values, because the line is not subsetted into data objects in any other way than by NA values.
+Lines have been represented in S in a simple form as a sequence of points (see Becker et al. (1988), Murrell (2006, pages 83–86)), based on lowering the graphic ‘pen’ at the first point and drawing to the successive points until an NA is met. Then the pen is raised and moved to the next non-NA value, where it is lowered, until the end of the set of points. While this is convenient for graphics output, it is less so for associating lines with data values, because the line is not subsetted into data objects in any other way than by NA values.
 
 The approach adopted here is to start with a Line object that is a matrix of 2D coordinates, without NA values. A list of Line objects forms the Lines slot of a Lines object. An identifying character tag is also required, and will be used for constructing SpatialLines objects using the same approach as was used above for matching ID values for spatial points.
 
@@ -386,29 +382,39 @@ str(SLjapan, max.level = 2)
 
 SpatialLines and SpatialPolygons objects are very similar, as can be seen in **Figure 2.4** – the lists of component entities stack up in a hierarchical fashion. A very typical way of exploring the contents of these objects is to use lapply or sapply in combination with slot. The lapply and sapply functions apply their second argument, which is a function, to each of the elements of their first argument. The command used here can be read as follows: return the length of the Lines slot – how many Line objects it contains – of each Lines object in the list in the lines slot of SLjapan, simplifying the result to a numeric vector. If lapply was used, the result would have been a list. As we see, no Lines object contains more than one Line object:
 
-SpatialLines
-Lines
-Lines
-ID
-Line
-lines
-Spatial
-coords
-SpatialPolygons
-Polygons
-Polygons
-plotOrder
-labpt ID
-area
-Polygon
-labpt area hole
-ringDir coords
-polygons
-plotOrder
-Spatial
-Spatial
-bbox 
-proj4string
+- **SpatialLines**
+    + *lines*
+    + **Spatial**
+
+- **Lines**
+    + *Lines*
+    + ID
+
+- **Line**
+    + coords
+
+- **SpatialPolygons**
+    + *polygons*
+    + plotOrder
+    + **Spatial**
+
+- **Polygons**
+    + *Polygons*
+    + plotOrder
+    + labpt 
+    + ID
+    + area
+
+- **Polygon**
+    + labpt 
+    + area 
+    + hole
+    + ringDir 
+    + coords
+
+- **Spatial**
+    + bbox 
+    + proj4string
 
 **Figure 2.4**. SpatialLines and SpatialPolygons classes and slots; thin arrows show subclass extensions, thick arrows the inclusion of lists of objects
 
@@ -458,7 +464,7 @@ Since all the Lines in the auck_shore object contain only single Line objects, c
 getClass("Polygon")
 ```
 
-The Polygon class extends the Line class by adding slots needed for polygons and checking that the first and last coordinates are identical. The extra slots are a label point, taken as the centroid of the polygon, the area of the polygon in the metric of the coordinates, whether the polygon is declared as a hole or not – the default value is a logical NA, and the ring direction of the polygon (discussed later in Section 2.6.2). No check is made of whether lines cross or polygons have ‘errors’, in other words whether features are simple in the OpenGIS® (OpenGeoSpatial) [7] context; these are discussed briefly later on p. 122. GIS should do this, and we assume that data read into R can be trusted and contain only simple features.
+The Polygon class extends the Line class by adding slots needed for polygons and checking that the first and last coordinates are identical. The extra slots are a label point, taken as the centroid of the polygon, the area of the polygon in the metric of the coordinates, whether the polygon is declared as a hole or not – the default value is a logical NA, and the ring direction of the polygon (discussed later in Section 2.6.2). No check is made of whether lines cross or polygons have ‘errors’, in other words whether features are simple in the OpenGIS (OpenGeoSpatial) [7] context; these are discussed briefly later on pages 122. GIS should do this, and we assume that data read into R can be trusted and contain only simple features.
 
 ```{r, comment=NA}
 getClass("Polygons")
@@ -609,32 +615,44 @@ object.size(slot(auck_el1, "data"))
 The grid.index slot is empty, while the coords slot is as described earlier. It differs from the bounding box of the grid as a whole, contained in the bbox slot, by half a cell resolution value in each direction. The total size of the SpatialGridDataFrame object is just over 12MB, almost all of which is made up of the data slot.
 
 ```{r, comment=NA}
-is.na(auck_el1$band1) <- auck_el1$band1 <= 0 | auck_el1$band1 > + 10000
+is.na(auck_el1$band1) <- auck_el1$band1 <= 0 | auck_el1$band1 > 10000
 summary(auck_el1$band1)
 ```
 
 Almost half of the data are at or below sea level, and other values are spikes in the radar data, and should be set to NA. Once this is done, about half of the data are missing. In other cases, even larger proportions of raster grids are missing, suggesting that an alternative representation of the same data might be attractive. One candidate from Terralib, discussed further in Chapter 4, is the cell representation of rasters, where the raster cells with data are represented by the coordinates of the cell centre, and by the sequence number of the cell among all the cells in the raster. In this representation, missing data are discarded, and savings in space and processing time can be large. It also permits cells to be stored, like points, in an external database. The class is here termed SpatialPixels, and has the same slots as SpatialGrid objects, but differently filled (**Figure 2.8**). The SpatialPixelsDataFrame class is analogous.
 
-SpatialGridDataFrame
-SpatialPixelsDataFrame
-SpatialPixels data
-grid
-grid.index
-SpatialPoints
-SpatialPixels
-GridTopology
-SpatialGrid data
-SpatialGrid
-cellcentre.offset cellsize cells.dim
-Spatial
-bbox proj4string
-grid
-grid.index
-SpatialPoints
-SpatialPoints
-coords
-Spatial
-data.frame
+- **SpatialGridDataFrame**
+    + **SpatialGrid**
+    + **data**
+
+- **SpatialGrid**
+    + **grid**
+    + grid.index
+    + **SpatialPoints**
+
+- **GridTopology**
+    + cellcentre.offset 
+    + cellsize 
+    + cells.dim
+    
+- **SpatialPixelsDataFrame**
+    + **SpatialPixels**
+    + **data**
+
+- **SpatialPixels**
+    + **grid**
+    + grid.index
+    + **SpatialPoints**
+
+- **Spatial**
+    + bbox 
+    + proj4string
+
+- **SpatialPoints**
+    + coords
+    + **Spatial**
+
+- **data.frame**
 
 **Figure 2.8**. SpatialGrid and SpatialPixel classes and their slots; arrows show subclass extensions
 
