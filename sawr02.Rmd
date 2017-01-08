@@ -10,6 +10,9 @@ library(sp)
 library(maps)
 library(maptools)
 library(rgdal)
+library(gpclib)
+library(rgeos)
+library(raster)
 ```
 
 *Applied Spatial Data Analysis with R* by Roger S. Bivand, Edzer J. Pebesma, and Virgilio Gómez-Rubio
@@ -107,8 +110,8 @@ This is a simple example, but very much more can be done with the formula abstra
 cars$qspeed <- cut(cars$speed, breaks = quantile(cars$speed), include.lowest = TRUE)
 is.factor(cars$qspeed)
 par(mfrow = c(1, 2))
-plot(dist ~ speed, data = cars)
-plot(dist ~ qspeed, data = cars)
+plot(dist ~ speed, data = cars, main = "numerical: scatterplot")
+plot(dist ~ qspeed, data = cars, main = "factor: boxplots")
 ```
 
 **Figure 2.1**. Plot methods for a formula with numerical (left panel) and factor (right panel) right-hand side variables
@@ -225,7 +228,7 @@ summary(CRAN_sp[brazil, ])
 The "[" operator also works for negative indices, which remove those coordinates from the object, here by removing mirrors south of the Equator:
 
 ```{r, comment=NA}
-south_of_equator <- which(coordinates(CRAN_sp)[, 2] < + 0)
+south_of_equator <- which(coordinates(CRAN_sp)[, 2] < 0)
 summary(CRAN_sp[-south_of_equator, ])
 ```
 
@@ -268,8 +271,7 @@ But if we have non-matching ID values, created by pasting pairs of letters toget
 CRAN_df1 <- CRAN_df
 row.names(CRAN_df1) <- sample(c(outer(letters, letters, paste, sep = "")),
                               nrow(CRAN_df1))
-CRAN_spdf3 <- SpatialPointsDataFrame(CRAN_mat, CRAN_df1, proj4string = llCRS,
-                                     match.ID = TRUE)
+try(CRAN_spdf3 <- SpatialPointsDataFrame(CRAN_mat, CRAN_df1, proj4string = llCRS, match.ID = TRUE))
 ```
 
 Let us examine the contents of objects of the SpatialPointsDataFrame class, shown in **Figure 2.2**. Because the class extends SpatialPoints, it also inherits the information contained in the Spatial class object. The data slot is where the information from the data frame is kept, in a data.frame object.
@@ -334,13 +336,12 @@ Transect and tracking data may also be represented as points, because the observ
 As an example, we use a data set [5] from satellite telemetry of a single loggerhead turtle crossing the Pacific from Mexico to Japan (Nichols et al., 2000).
 
 ```{r, comment=NA}
+setwd("~/GitHub/GIS")
 turtle_df <- read.csv("seamap105_mod.csv")
 summary(turtle_df)
 ```
 
 Before creating a SpatialPointsDataFrame, we will timestamp the observations, and reorder the input data frame by timestamp to make it easier to add months to **Figure 2.3**, to show progress westwards across the Pacific:
-
-**Figure 2.3**. Westward movements of a captive-raised adult loggerhead turtle (Caretta caretta) from 10 August 1996 to 12 August 1997 
 
 ```{r, comment=NA}
 timestamp <- as.POSIXlt(strptime(as.character(turtle_df$obs_date), 
@@ -353,6 +354,20 @@ proj4string(turtle_sp) <- CRS("+proj=longlat +ellps=WGS84")
 ```
 
 The input data file is as downloaded, but without columns with identical values for all points, such as the number of the turtle (07667). We return to this data set in Chapter 6, examining the interesting contributed package trip by Michael Sumner, which proposes customized classes and methods for data of this kind.
+
+```{r, comment=NA}
+gshhs.c.b <- system.file("share/gshhs_c.b", package = "maptools")
+gpclibPermit()
+pac <- Rgshhs(gshhs.c.b, level = 1, xlim = c(130, 250), ylim = c(15, 60), verbose = FALSE)
+plot(pac$SP, axes = TRUE, col = "khaki2", xaxs = "i", yaxs = "i")
+plot(turtle_sp, add = TRUE)
+m_rle <- rle(months(turtle_sp$timestamp))
+clen <- cumsum(m_rle$lengths[-length(m_rle$lengths)]) - 1
+crds <- coordinates(turtle_sp)
+text(crds[clen, ], labels = m_rle$values[-1], pos = 3, offset = 1.5, srt = 45)
+```
+
+**Figure 2.3**. Westward movements of a captive-raised adult loggerhead turtle (Caretta caretta) from 10 August 1996 to 12 August 1997 
 
 ## 2.5 SpatialLines
 
@@ -442,6 +457,27 @@ summary(auck_shore)
 
 The shorelines are still just represented by lines, shown in **Figure 2.5**, and so color filling of apparent polygons formed by line rings is not possible. For this we need a class of polygon objects, discussed in Section 2.6. Lines, however, can be generalized by removing detail that is not required for analysis or visualization – the maps and RArcInfo packages contain functions for line thinning. This operation can be performed successfully only on lines, because neighboring polygons may have their shared boundary thinned differently. This leads to the creation of slivers, thin zones belonging to neither polygon or to both.
 
+```{r, comment=NA}
+lns <- slot(auck_shore, "lines")
+islands_auck <- sapply(lns, function(x) {
+  crds <- slot(slot(x, "Lines")[[1]], "coords")
+  identical(crds[1,], crds[nrow(crds),])
+})
+islands_sl <- auck_shore[islands_auck]
+list_of_Lines <- slot(islands_sl, "lines")
+islands_sp <- SpatialPolygons(lapply(list_of_Lines, function(x) {
+    Polygons(list(Polygon(slot(slot(x, "Lines")[[1]], "coords"))),
+      ID=slot(x, "ID"))
+  }),
+  proj4string=CRS("+proj=longlat +ellps=WGS84"))
+
+plot(auck_shore)
+legend("bottomleft", legend = "a)", bty = "n")
+plot(auck_shore)
+plot(islands_sp, add = TRUE, col = "grey")
+legend("bottomleft", legend = "b)", bty = "n")
+```
+
 **Figure 2.5**. Two maps of shorelines around Auckland: (a) line representation, (b) line representation over-plotted with islands converted to polygons and shaded. Note that Waiheke Island, the large island to the east, is not closed, and so not found as an island
 
 ## 2.6 SpatialPolygons
@@ -514,10 +550,10 @@ Then we can use identifying tag matching to suit the rows of the data frame to t
 ```{r, comment=NA}
 sat <- read.table("state.sat.data_mod.txt", row.names = 5, header = TRUE)
 str(sat)
-id <- match(row.names(sat), sapply(slot(state.sp, "polygons"),
-  function(x) slot(x, "ID")))
+id <- match(row.names(sat), row.names(state.sp))
 row.names(sat)[is.na(id)]
-state.spdf <- SpatialPolygonsDataFrame(state.sp, sat[!is.na(id), ])
+sat1 <- sat[!is.na(id), ]
+state.spdf <- SpatialPolygonsDataFrame(state.sp, sat1)
 str(slot(state.spdf, "data"))
 str(state.spdf, max.level = 2)
 ```
@@ -525,8 +561,8 @@ str(state.spdf, max.level = 2)
 If we modify the row name of ‘arizona’ in the data frame to ‘Arizona’, there is no longer a match with a polygon identifying tag, and an error is signalled.
 
 ```{r, comment=NA, error=FALSE}
-rownames(sat)[3] <- "Arizona"
-try(SpatialPolygonsDataFrame(state.sp, sat[!is.na(id), ]))
+rownames(sat1)[2] <- "Arizona"
+try(SpatialPolygonsDataFrame(state.sp, sat1))
 ```
 
 In subsequent analysis, Wall (2004) also drops District of Columbia. Rather than having to manipulate polygons and their data separately, when using a SpatialPolygonsDataFrame object, we can say:
@@ -551,13 +587,26 @@ An approach that works when the relative status of polygons is known is to set t
 load("high.RData")
 manitoulin_sp <- high$SP
 length(slot(manitoulin_sp, "polygons"))
-sapply(slot(slot(manitoulin_sp, "polygons")[[1]], "Polygons"), 
-       function(x) slot(x, "hole"))
-sapply(slot(slot(manitoulin_sp, "polygons")[[1]], "Polygons"), 
-       function(x) slot(x, "ringDir"))
+sapply(slot(slot(manitoulin_sp, "polygons")[[1]], "Polygons"), function(x) slot(x, "hole"))
+sapply(slot(slot(manitoulin_sp, "polygons")[[1]], "Polygons"), function(x) slot(x, "ringDir"))
 ```
 
 In **Figure 2.6**, there is only one Polygons object in the polygons slot of manitoulin_sp, representing the continental landmass, exposed along the northern edge, and containing the complete set of polygons. Within this is a large section covered by Lake Huron, which in turn is covered by islands and lakes on islands. Not having a full topological representation means that for plotting, we paint the land first, then paint the lake, then the islands, and finally the lakes on islands. Because the default plotting color for holes is ‘transparent’, they can appear to be merged into the surrounding land – the same problem arises where the hole slot is wrongly assigned. The plotOrder slots in Polygons and SpatialPolygons objects attempt to get around this problem, but care is usually sensible if the spatial objects being handled are complicated.
+
+```{r, comment=NA}
+manitoulin_sp <- createSPComment(manitoulin_sp)
+sapply(slot(manitoulin_sp, "polygons"), comment)
+
+plot(manitoulin_sp, pbg = "lightsteelblue2", col = "khaki2", usePolypath = FALSE)
+text(t(sapply(slot(slot(manitoulin_sp, "polygons")[[1]], "Polygons"), 
+              function(x) slot(x, "labpt")))[-c(1,2),], 
+     label = high$polydata$level[-c(1,2)], col = "black", font = 2)
+cmt <- unlist(strsplit(sapply(slot(manitoulin_sp, "polygons"), comment), " "))
+plot(manitoulin_sp, pbg = "lightsteelblue2", col = "khaki2", usePolypath = FALSE)
+text(t(sapply(slot(slot(manitoulin_sp, "polygons")[[1]], "Polygons"), 
+              function(x) slot(x, "labpt")))[-c(1, 2), ], 
+     label = cmt[-c(1, 2)], col = "black", font = 2)
+```
 
 **Figure 2.6**. The northern, Canadian shore of Lake Huron, including Manitoulin Island and lakes on the island; islands (light grey) and lakes on islands (dark grey) are marked with their GSHHS levels
 
@@ -599,23 +648,59 @@ summary(manitoulin_SG)
 
 As an example of using these classes with imported data, we use an excerpt from the Shuttle Radar Topography Mission (SRTM) flown in 2000, for the Auckland area [10] (**Figure 2.7**). The data have been read from a Geotiff file into a SpatialGridDataFrame object – a SpatialGrid object extended with a data slot occupied by a data.frame object, filled with a single band of data representing elevation in meters. After checking the class of the data object, we examine in turn its slots. The grid slot contains the underlying GridTopology object, with the lower left cell centre coordinates, the pair of cell size resolution values, here both equal to 3 arcsec, and the numbers of columns and rows:
 
-**Figure 2.7**. SRTM elevation data in meters for the Auckland isthmus over-plotted with an excerpt from the GSHHS full resolution shoreline, including two lakes – there are detailed differences stemming from the very different technologies underlying the two data sources. A transect is marked for later use
-
 ```{r, comment=NA, error=TRUE}
-auck_el1 <- readGDAL("70042108.tif")
+#auck_el1 <- readGDAL("70042108.tif")
+load("auck_el1.RData")
+is.na(auck_el1$band1) <- auck_el1$band1 <= 0
+load("auck_gshhs.RData")
+
 class(auck_el1)
 slot(auck_el1, "grid")
-slot(auck_el1, "grid.index")
-slot(auck_el1, "coords")
 slot(auck_el1, "bbox")
 object.size(auck_el1)
 object.size(slot(auck_el1, "data"))
 ```
 
+```{r, comment=NA}
+r <- raster("70042108.tif")
+
+class(r)
+inMemory(r)
+object.size(r)
+cellStats(r, max)
+cellStats(r, min)
+inMemory(r)
+
+out <- raster(r)
+bs <- blockSize(out)
+out <- writeStart(out, filename = tempfile(), overwrite = TRUE)
+for (i in 1:bs$n) {
+    v <- getValues(r, row=bs$row[i], nrows = bs$nrows[i])
+    v[v <= 0] <- NA
+    writeValues(out, v, bs$row[i])
+}
+out <- writeStop(out)
+cellStats(out, min)
+cellStats(out, max)
+inMemory(out)
+
+plot(out, col = terrain.colors(100))
+plot(auck_gshhs, add = TRUE)
+```
+
+**Figure 2.7**. SRTM elevation data in meters for the Auckland isthmus over-plotted with an excerpt from the GSHHS full resolution shoreline, including two lakes – there are detailed differences stemming from the very different technologies underlying the two data sources. A transect is marked for later use
+
+```{r, comment=NA}
+r1 <- as(out, "SpatialGridDataFrame")
+summary(r1)
+r2 <- as(r1, "RasterLayer")
+summary(r2)
+```
+
 The grid.index slot is empty, while the coords slot is as described earlier. It differs from the bounding box of the grid as a whole, contained in the bbox slot, by half a cell resolution value in each direction. The total size of the SpatialGridDataFrame object is just over 12MB, almost all of which is made up of the data slot.
 
 ```{r, comment=NA}
-is.na(auck_el1$band1) <- auck_el1$band1 <= 0 | auck_el1$band1 > 10000
+is.na(auck_el1$band1) <- auck_el1$band1 <= 0
 summary(auck_el1$band1)
 ```
 
@@ -657,7 +742,9 @@ Almost half of the data are at or below sea level, and other values are spikes i
 **Figure 2.8**. SpatialGrid and SpatialPixel classes and their slots; arrows show subclass extensions
 
 ```{r, comment=NA}
-auck_el2 <- as(auck_el1, "SpatialPixelsDataFrame") 
+#auck_el2 <- as(auck_el1, "SpatialPixelsDataFrame") 
+load("auck_el2.RData")
+
 object.size(auck_el2)
 object.size(slot(auck_el2, "grid.index"))
 object.size(slot(auck_el2, "coords"))
