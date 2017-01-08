@@ -14,6 +14,7 @@ library(lattice)
 library(grid)
 library(RColorBrewer)
 library(classInt)
+library(gstat)
 ```
 
 *Applied Spatial Data Analysis with R* by Roger S. Bivand, Edzer J. Pebesma, and Virgilio Gómez-Rubio
@@ -34,8 +35,6 @@ Package sp provides plot methods that build on the traditional R plotting system
 
 In the following example session, we create points, lines, polygons, and grid object, from data.frame objects, retrieved from the sp package by function data, and plot them. The four plots obtained by the plot and image commands are shown in **Figure 3.1**.
 
-**Figure 3.1**. The meuse data set: sample points, the sample path (line), the Meuse river (ring), and the gridded study area
-
 ```{r, comment=NA}
 data(meuse)
 coordinates(meuse) <- c("x", "y")
@@ -43,18 +42,20 @@ plot(meuse)
 title("points")
 ```
 
-The SpatialPointsDataFrame object used is created from a data.frame provided
-with sp, and the plot method shows the points with the default symbol.
+**Figure 3.1 (a)**. The meuse data set: sample points
+
+The SpatialPointsDataFrame object used is created from a data.frame provided with sp, and the plot method shows the points with the default symbol.
 
 ```{r, comment=NA}
 cc <- coordinates(meuse)
-m.sl <- SpatialLines(list(Lines(list(Line(cc)))))
+m.sl <- SpatialLines(list(Lines(list(Line(cc)), "line1")))
 plot(m.sl)
 title("lines")
 ```
 
-A SpatialLines object is made by joining up the points in sequence, and plot
-draws the resulting zig-zags.
+**Figure 3.1 (b)**. The meuse data set: the sample path (line)
+
+A SpatialLines object is made by joining up the points in sequence, and plot draws the resulting zig-zags.
 
 ```{r, comment=NA}
 data(meuse.riv)
@@ -63,6 +64,8 @@ meuse.sr <- SpatialPolygons(meuse.lst)
 plot(meuse.sr, col = "grey")
 title("polygons")
 ```
+
+**Figure 3.1 (c)**. The meuse data set: the Meuse river (ring)
 
 We make a SpatialPolygons object from data provided with sp outlining the banks of the River Meuse.
 
@@ -73,6 +76,8 @@ meuse.grid <- as(meuse.grid, "SpatialPixels")
 image(meuse.grid, col = "grey")
 title("grid")
 ```
+
+**Figure 3.1 (d)**. The meuse data set: the gridded study area
 
 Finally, we convert grid data for the same Meuse bank study area into a ‘SpatialPixels’ object and display it using the image method, with all cells set to ‘grey’.
 
@@ -150,12 +155,22 @@ When we decide not to draw axes on a map, in addition to reference boundaries, w
 ```{r, comment=NA}
 plot(meuse)
 plot(meuse.sr, add = TRUE)
-plot(meuse)
-SpatialPolygonsRescale(layout.scale.bar(), offset = locator(1), scale = 1000, 
+#plot(meuse)
+#SpatialPolygonsRescale(layout.scale.bar(), offset = locator(1), scale = 1000, 
+#                       fill = c("transparent", "black"), plot.grid = FALSE) 
+#text(locator(1), "0")
+#text(locator(1), "1 km")
+#SpatialPolygonsRescale(layout.north.arrow(), offset = locator(1), scale = 400, plot.grid = FALSE)
+locator1 <- c(178605 + 9*(181390 - 178605)/10, 329714 + (333611 - 329714)/10)
+SpatialPolygonsRescale(layout.scale.bar(), offset = locator1, scale = 1000, 
                        fill = c("transparent", "black"), plot.grid = FALSE) 
-text(locator(1), "0")
-text(locator(1), "1 km")
-SpatialPolygonsRescale(layout.north.arrow(), offset = locator(1), scale = 400, plot.grid = FALSE)
+text(178605 + 9*(181390 - 178605)/10 - 250, 329714 + (333611 - 329714)/10 + 200, 
+     "0", pos = 4)
+text(178605 + 9*(181390 - 178605)/10 + 750, 329714 + (333611 - 329714)/10 + 200, 
+     "1 km", pos = 4)
+locator1 <- c(178605 + (181390 - 178605)/4, 329714 + 3*(333611 - 329714)/4)
+SpatialPolygonsRescale(layout.north.arrow(), offset = locator1, scale = 400, plot.grid = FALSE)
+box()
 ```
 
 **Figure 3.5**. Scale bar and north arrow as map elements
@@ -169,21 +184,15 @@ Unprojected data have coordinates in latitude and longitude degrees, with negati
 When, for reference purposes, a grid needs to be added to a map, the function gridlines can be used to generate an object of class SpatialLines. By default it draws lines within the bounding box of the object at values where the default axes labels are drawn; other values can be specified. Grid lines may be latitude/longitude grids, and these are non-straight lines. This is accomplished by generating a grid for unprojected data, projecting it, and plotting it over the map shown. An example is given in **Figure 1.2**. This is the code used to define and draw projected latitude/longitude grid lines and grid line labels for this figure, which uses the world map from package maps:
 
 ```{r, comment=NA}
-prj_new <- CRS("+proj=moll")
-wrld <- map("world", interior = FALSE, xlim = c(-179, 179), ylim = c(-89, 89), plot = FALSE)
-wrld_p <- pruneMap(wrld, xlim = c(-179, 179))
-llCRS <- CRS("+proj=longlat +ellps=WGS84")
-wrld_sp <- map2SpatialLines(wrld_p, proj4string = llCRS) 
-wrld_proj <- spTransform(wrld_sp, prj_new)
-wrld_grd <- gridlines(wrld_sp, easts = c(-179, seq(-150, 150, 50), 179.5), 
-                      norths = seq(-75, 75, 15), ndiscr = 100) 
-wrld_grd_proj <- spTransform(wrld_grd, prj_new)
-at_sp <- gridat(wrld_sp, easts = 0, norths = seq(-75, 75, 15), offset = 0.3)
-at_proj <- spTransform(at_sp, prj_new)
-plot(wrld_proj, col = "grey60")
-plot(wrld_grd_proj, add = TRUE, lty = 3, col = "grey70") 
-text(coordinates(at_proj),pos = at_proj$pos, offset = at_proj$offset, 
-     labels = parse(text = as.character(at_proj$labels)), cex = 0.6)
+nc <- readShapePoly(system.file("shapes/sids.shp", package = "maptools")[1], 
+                    proj4string = CRS("+proj=longlat +datum=NAD27"))
+rrt <- nc$SID74/nc$BIR74
+brks <- quantile(rrt, seq(0, 1, 1/5))
+cols <- brewer.pal(5, "Reds")
+plot(nc, col = cols[findInterval(rrt, brks, all.inside = TRUE)], axes = FALSE)
+box()
+degAxis(1)
+degAxis(2, at=34:37)
 ```
 
 **Figure 3.6**. Decimal degrees in axis labels: the North Carolina SIDS data
@@ -194,21 +203,21 @@ Here, function gridat returns an object to draw the labels for these ‘gridded 
 
 R distinguishes between figure region, which is the size of the total figure including axes, title, etc., and plotting region, which is the area where the actual data are plotted. To control the total size of the figure, we can get and set the figure size in inches:
 
-```{r, comment=NA}
+```{r, comment=NA, eval=FALSE}
 par("pin")
 par(pin = c(4, 4))
 ```
 
 If we want to enlarge the plotting window, we may have to close the current plotting device and reopen it specifying size, for example
 
-```{r, comment=NA}
+```{r, comment=NA, eval=FALSE}
 dev.off()
 X11(width = 10, height = 10)
 ```
 
 on Unix machines; replace X11 with windows on MS-Windows computers and with quartz on Mac OS X. When graphic output is written to files, we can use, for example
 
-```{r, comment=NA}
+```{r, comment=NA, eval=FALSE}
 postscript("file.ps", width = 10, height = 10)
 ```
 
@@ -223,19 +232,19 @@ plot(meuse, pch = 1)
 box()
 ```
 
+**Figure 3.7**. Plotting region exactly equal to sample location ranges: border point symbols are clipped
+
 we first set the aspect of the plotting region equal to that of the data points, and then we plot the points without allowing for the 4% extension of the range in all directions. The result (**Figure 3.7**) is that in all four sides one plotting symbol is clipped by the plot border.
 
 If we want to create more than one map in a single figure, as was done in **Figure 3.1**, we can subdivide the figure region into a number of subregions. We can split the figure into two rows and three columns either by
 
-**Figure 3.7**. Plotting region exactly equal to sample location ranges: border point symbols are clipped
-
-```{r, comment=NA}
+```{r, comment=NA, eval=FALSE}
 par(mfrow = c(2, 3))
 ```
 
 or
 
-```{r, comment=NA}
+```{r, comment=NA, eval=FALSE}
 layout(matrix(1:6, 2, 3, byrow = TRUE))
 ```
 
@@ -280,14 +289,21 @@ Up to now we have only plotted the geometry or topology of the spatial objects. 
 We provide image methods for objects of class SpatialPixelsDataFrame and SpatialGridDataFrame. As an example, we can plot interpolated (see Chapter 8) zinc concentration (zinc.idw) as a background image along with the data:
 
 ```{r, comment=NA}
-grays = gray.colors(4, 0.55, 0.95)
-image(zn.idw, col = grays, breaks = log(c(100, 200, 400, + 800, 1800)))
-plot(meuse.sr, add = TRUE)
+data(meuse.grid)
+coordinates(meuse.grid) <- c("x", "y")
+gridded(meuse.grid) <- TRUE
+zn.idw <- krige(log(zinc) ~ 1, meuse, meuse.grid)
+
+cols <- brewer.pal(4, "Reds")
+image(zn.idw, col = cols, breaks=log(c(100, 200, 400, 800, 1800)))
+plot(meuse.pol, add = TRUE)
 plot(meuse, pch = 1, cex = sqrt(meuse$zinc)/20, add = TRUE)
 legVals <- c(100, 200, 500, 1000, 2000)
-legend("left", legend = legVals, pch = 1, pt.cex = sqrt(legVals)/20, bty = "n", title = "measured")
-legend("topleft", legend = c("100-200", "200-400", "400-800", "800-1800"), 
-       fill = grays, bty = "n", title = "interpolated")
+legend("left", legend = legVals, pch = 1, pt.cex = sqrt(legVals)/20, bty = "n",
+       title = "measured, ppm", cex = 0.8, y.inter = 0.9)
+legend("topleft", fill = cols, legend = c("100-200", "200-400", "400-800", "800-1800"), 
+       bty = "n", title = "interpolated, ppm", cex = 0.8, y.inter = 0.9)
+title("measured and interpolated zinc")
 ```
 
 **Figure 3.8**. Sample data points for zinc (ppm) plotted over an interpolated image, with symbol area proportional to measured concentration
@@ -303,6 +319,15 @@ Apart from the traditional plot methods provided by package sp, a second method,
 Consider the plotting of two interpolation scenarios for the zinc variable in the meuse data set, obtained on the direct scale and on the log scale. We can do this either by the levelplot function from package lattice, or by using spplot, which is for grids a simple wrapper around levelplot:
 
 ```{r, comment=NA}
+data(meuse)
+coordinates(meuse) <- ~x + y
+data(meuse.grid)
+coordinates(meuse.grid) <- ~x + y
+gridded(meuse.grid) <- TRUE
+zn <- krige(zinc ~ 1, meuse, meuse.grid)
+zn$direct <- zn$var1.pred
+zn$log <- exp(krige(log(zinc) ~ 1, meuse, meuse.grid)$var1.pred)
+
 levelplot(z ~ x + y | name, spmap.to.lev(zn[c("direct", "log")]), asp = "iso")
 spplot(zn[c("direct", "log")])
 ```
@@ -321,22 +346,50 @@ Function spplot plots spatial objects using color (or grey tone) to denote attri
 
 **Figure 3.10** shows a typical plot with four variables. If the goal is to compare the absolute levels in ppm across the four heavy metal variables, it makes sense to plot them in a single figure with one legend. For such cases, the conditioning plots of spplot are ideal. Other cases in which multiple sub-maps are useful are, for example when different moments of time or different modeling scenarios are used to define the factor that splits the data over subplots (panels).
 
-**Figure 3.10**. Soil measurements for four heavy metals in the Meuse data set; (left) in ppm units, (right) each variable scaled to mean zero and unit standard variance
+```{r, comment=NA}
+cuts <- c(0, 20, 50, 200, 500, 2000)
+grys <- brewer.pal(7, "Reds")
+print(spplot(meuse[1:4], main = "ppm", cuts = cuts, cex = 0.5, col.regions = grys, 
+             key.space = "right"),
+      split = c(1, 1, 1, 2), more = TRUE)
+
+meuse$lead.st <- as.vector(scale(meuse$lead))
+meuse$zinc.st <- as.vector(scale(meuse$zinc))
+meuse$copper.st <- as.vector(scale(meuse$copper))
+meuse$cadmium.st <- as.vector(scale(meuse$cadmium))
+cuts <- c(-1.2, 0, 1, 2, 3, 5)
+print(spplot(meuse, c("cadmium.st", "copper.st", "lead.st", "zinc.st"), key.space = "right", 
+             main = "standardised", cex = 0.5, cuts = cuts, col.regions = grys),
+        split=c(1, 2, 1, 2))
+```
+
+**Figure 3.10**. Soil measurements for four heavy metals in the Meuse data set; (top) in ppm units, (bottom) each variable scaled to mean zero and unit standard variance
 
 The first argument to spplot is a Spatial*DataFrame object with points, lines, polygons, or a grid. The second argument tells which attributes (column names or numbers) should be used; if omitted, all attributes are plotted. Further attributes control the plotting: colors, symbols, legend classes, size, axes, and geographical reference items to be added.
 
 An example of a SpatialLinesDataFrame plot is shown in **Figure 3.11** (left). The R function contourLines is used to calculate the contourlines:
 
 ```{r, comment=NA}
+grys <- brewer.pal(9, "Reds")
 data(meuse.grid)
 coordinates(meuse.grid) <- c("x", "y")
-meuse.grid <- as(meuse.grid, "SpatialPixelsDataFrame") 
-im <- as.image.SpatialGridDataFrame(meuse.grid["dist"]) 
-cl <- ContourLines2SLDF(contourLines(im))
-spplot(cl)
+meuse.grid <- as(meuse.grid, "SpatialPixelsDataFrame")
+cl <- ContourLines2SLDF(contourLines(as.image.SpatialGridDataFrame(meuse.grid["dist"])))
+print(spplot(cl, colorkey = list(height = 0.8, width = 0.6), col.regions = grys), 
+      split = c(1, 1, 3, 1), more = TRUE)
+grys <- brewer.pal(6, "Reds")
+cuts <- (0:5)/5
+print(spplot(meuse.grid, "dist", 
+             at = cuts, 
+             colorkey = list(labels = list(at = cuts), at = cuts),
+             col.regions = grys), 
+      split = c(2, 1, 3, 1), more = TRUE)
+meuse.grid$f <- factor(meuse.grid$ffreq, labels = c("annual", "2-5 yrs", "> 5 yrs"))
+print(spplot(meuse.grid, "f", colorkey = list(height = 0.4, width = 0.6), 
+             col.regions = brewer.pal(3, "Reds")), split = c(3, 1, 3, 1), more = FALSE)
 ```
 
-**Figure 3.11**. (Top left) Contour lines for distance to river Meuse, levels represented by grey tones; (top right) grid plot of a numerical variable; (bottom left) plot of the factor variable flood frequency; note the different legend key
+**Figure 3.11**. (Left) Contour lines for distance to river Meuse, levels represented by grey tones; (middle) grid plot of a numerical variable; (right) plot of the factor variable flood frequency; note the different legend key
 
 ### 3.2.3 Adding Reference and Layout Elements to Plots
 
